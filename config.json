@@ -271,7 +271,15 @@
     "store": "system"
   },
   "certificate_providers": [],
-  "http_clients": [],
+  "http_clients": [
+    {
+      "tag": "默认规则集下载",
+      "engine": "go",
+      "version": 2,
+      "disable_version_fallback": false,
+      "detour": "自建"
+    }
+  ],
   "network_namespaces": [],
   "endpoints": [],
   "inbounds": [
@@ -571,9 +579,7 @@
         "tag": "geosite-cn",
         "format": "binary",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
-        "http_client": {
-          "detour": "直连"
-        },
+        "http_client": "默认规则集下载",
         "update_interval": "7d"
       },
       {
@@ -581,9 +587,7 @@
         "tag": "geosite-openai",
         "format": "binary",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
-        "http_client": {
-          "detour": "直连"
-        },
+        "http_client": "默认规则集下载",
         "update_interval": "7d"
       },
       {
@@ -591,9 +595,7 @@
         "tag": "geosite-bilibili",
         "format": "binary",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
-        "http_client": {
-          "detour": "直连"
-        },
+        "http_client": "默认规则集下载",
         "update_interval": "7d"
       },
       {
@@ -601,9 +603,7 @@
         "tag": "geosite-telegram",
         "format": "binary",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
-        "http_client": {
-          "detour": "直连"
-        },
+        "http_client": "默认规则集下载",
         "update_interval": "7d"
       },
       {
@@ -611,9 +611,7 @@
         "tag": "geoip-cn",
         "format": "binary",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
-        "http_client": {
-          "detour": "直连"
-        },
+        "http_client": "默认规则集下载",
         "update_interval": "7d"
       }
     ],
