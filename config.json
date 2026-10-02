@@ -294,6 +294,13 @@
         "192.168.0.0/16",
         "fc00::/7"
       ]
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41080,
+      "set_system_proxy": false
     }
   ],
   "outbounds": [
@@ -563,9 +570,9 @@
         "type": "remote",
         "tag": "geosite-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
         "http_client": {
-          "detour": "主代理"
+          "detour": "直连"
         },
         "update_interval": "7d"
       },
@@ -573,9 +580,9 @@
         "type": "remote",
         "tag": "geosite-openai",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/openai.srs",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
         "http_client": {
-          "detour": "主代理"
+          "detour": "直连"
         },
         "update_interval": "7d"
       },
@@ -583,9 +590,9 @@
         "type": "remote",
         "tag": "geosite-bilibili",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/bilibili.srs",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
         "http_client": {
-          "detour": "主代理"
+          "detour": "直连"
         },
         "update_interval": "7d"
       },
@@ -593,9 +600,9 @@
         "type": "remote",
         "tag": "geosite-telegram",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/telegram.srs",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
         "http_client": {
-          "detour": "主代理"
+          "detour": "直连"
         },
         "update_interval": "7d"
       },
@@ -603,9 +610,9 @@
         "type": "remote",
         "tag": "geoip-cn",
         "format": "binary",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
         "http_client": {
-          "detour": "主代理"
+          "detour": "直连"
         },
         "update_interval": "7d"
       }
