@@ -4,17 +4,17 @@
 
 ## 始终保持最新的仓库文件
 
-每次私有源仓库发布新版本后，自动覆盖仓库根目录这两个文件：
+每次私有源仓库发布新版本后，自动覆盖以下最新版文件：
 
-- [config.json](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config.json)
+- [Android 配置](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config-android.json)
+- [Windows 配置草稿](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config-windows.json)
 - [SubStore.js](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/SubStore.js)
 
-## 版本 Release
+## 最新 Release 附件
 
-Release 按版本号保留历史版本和发布说明：
-
-- [最新 Release 的 config.json](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config.json)
+- [最新 Release 的 Android 配置](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config-android.json)
+- [最新 Release 的 Windows 配置草稿](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config-windows.json)
 - [最新 Release 的 SubStore.js](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/SubStore.js)
 - [全部 Releases](https://github.com/H-starlit/sing-box-config-release-codex/releases)
 
-仓库根目录只保留最新版文件；旧版本文件仍可从对应版本的 Release 附件下载。
+Windows 配置仍处于草稿阶段，尚未完成 Windows 端专项确认和验证。
