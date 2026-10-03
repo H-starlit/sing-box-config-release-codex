@@ -17,6 +17,26 @@
   "endpoints": [],
   "inbounds": [
     {
+      "type": "tun",
+      "tag": "tun-in",
+      "address": [
+        "198.18.0.1/30",
+        "2001:db8::1/126"
+      ],
+      "auto_route": true,
+      "dns_mode": "hijack",
+      "udp_timeout": "5m",
+      "udp_mapping": "endpoint_independent",
+      "udp_filtering": "endpoint_independent",
+      "udp_nat_max": 0,
+      "route_exclude_address": [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fc00::/7"
+      ]
+    },
+    {
       "type": "mixed",
       "tag": "mixed-in",
       "listen": "127.0.0.1",
