@@ -52,41 +52,26 @@ const regions = [
   { name: '香港', patterns: [/港|🇭🇰|hong[ -]?kong/i, /(?:^|[^A-Z])HK(?=$|[^A-Za-z])/] }
 ]
 
-// A 提供商节点进入名称以“1”结尾的组，B 提供商节点进入以“2”结尾的组。
-// 例如 A-...美国... → 美国1，B-...Japan... → 日本2。
+// A 提供商节点进入国家 A 组并自动测速；B 提供商节点进入国家 B 手动选择组。
+// 例如 A-...美国... → 美国A（urltest），B-...Japan... → 日本B（selector）。
 const providers = [
-  { prefix: 'A-', suffix: '1' },
-  { prefix: 'B-', suffix: '2' }
+  { prefix: 'A-', suffix: 'A', type: 'urltest' },
+  { prefix: 'B-', suffix: 'B', type: 'selector' }
 ]
 
 // 组合订阅中预期存在的三个自建节点标签。
 // 只有这三个标签会被加入“自建”组；其他没有 A-/B- 前缀的节点都会忽略。
 const customTags = ['自建-VPS-WS', '自建-VPS-CFtunnel', '自建-VPS-直连']
 
-// 先为 6 个地区 × 2 个提供商检查模板组，并建立“组标签 → 组对象及待加入节点”的映射。
-// 组类型可以是手动 selector，也可以是测速 urltest；其余类型不接受。
+// groups 只记录实际识别到节点的国家/提供商组合；没有匹配节点时不创建空国家组。
 const groups = new Map()
-for (const region of regions) {
-  for (const provider of providers) {
-    const tag = `${region.name}${provider.suffix}`
-    const matches = config.outbounds.filter(outbound => outbound && outbound.tag === tag)
-    if (matches.length !== 1 || !['selector', 'urltest'].includes(matches[0].type)) {
-      throw new Error(`模板缺少唯一的 selector/urltest 地区组：${tag}`)
-    }
-    // 当前模板应保留一个“直连”占位，避免 selector/urltest 的 outbounds 为空。
-    // 若组已含真实节点，通常说明输入模板不是预期的公开底稿，拒绝覆盖它。
-    if (!Array.isArray(matches[0].outbounds) || matches[0].outbounds.length !== 1 || matches[0].outbounds[0] !== '直连') {
-      throw new Error(`地区组 ${tag} 已被修改，请使用公开模板作为输入`)
-    }
-    // 保留原组对象，以便后续替换 outbounds；members 暂存匹配到的订阅节点标签。
-    groups.set(tag, { outbound: matches[0], members: [] })
-  }
-}
 
 // existingTags 用于防止订阅节点标签与模板已有标签冲突，也防止订阅内部重复标签。
 const existingTags = new Set(config.outbounds.map(outbound => outbound.tag))
 // selected 保存最终允许并入模板的代理出站。
 const selected = []
+// dynamicGroups 与订阅节点分开保存，最终先写策略组再写其成员节点。
+const dynamicGroups = []
 // customMembers 记录组合订阅里找到的自建节点标签。
 const customMembers = []
 
@@ -99,19 +84,19 @@ for (const proxy of produced) {
   // 自建节点按明确标签识别；普通订阅节点只接收 A- 或 B- 前缀。
   const isCustom = customTags.includes(tag)
   if (!isCustom && !/^[AB]-/.test(tag)) continue
+  const provider = isCustom ? null : providers.find(item => tag.startsWith(item.prefix))
+  if (!isCustom && !provider) continue
 
   // 地区关键词只检查提供商前缀之后的文字，避免 A-/B- 本身参与地区匹配。
   const country = isCustom ? '' : tag.slice(2)
   const matchingRegions = isCustom ? [] : regions.filter(region => region.patterns.some(pattern => pattern.test(country)))
 
-  // A 提供商的非目标地区节点不导入；B 提供商的非目标地区节点集中放入“韩国2”。
-  // “韩国2”因此也可能是 B 提供商的剩余节点组，其中成员未必实际位于韩国。
-  if (!isCustom && matchingRegions.length === 0 && !tag.startsWith('B-')) continue
-
   // 一个名称若同时命中多个地区，无法安全决定分组，要求先修正节点标签。
   if (matchingRegions.length > 1) {
     throw new Error('节点名称同时匹配多个地区，请调整地区标记')
   }
+  // 只导入能从当前识别表确定国家的 A/B 节点；未识别国家不会被错误塞进其他国家组。
+  if (!isCustom && matchingRegions.length === 0) continue
 
   // 代理出站必须有类型；标签必须唯一，且不能与模板中已有出站重名。
   if (typeof proxy.type !== 'string' || existingTags.has(tag)) {
@@ -123,9 +108,9 @@ for (const proxy of produced) {
   if (isCustom) {
     customMembers.push(tag)
   } else {
-    const provider = providers.find(item => tag.startsWith(item.prefix))
-    const groupTag = matchingRegions.length === 0 ? '韩国2' : `${matchingRegions[0].name}${provider.suffix}`
-    groups.get(groupTag).members.push(tag)
+    const groupTag = `${matchingRegions[0].name}${provider.suffix}`
+    if (!groups.has(groupTag)) groups.set(groupTag, [])
+    groups.get(groupTag).push(tag)
   }
 
   // 若服务器地址是域名且节点没有自己的 domain_resolver，则补上 dns-ali。
@@ -156,20 +141,41 @@ if (customMembers.length) {
   else delete group[0].default
 }
 
-// 将已分类的订阅节点写入地区组。
-for (const [tag, group] of groups) {
-  if (group.members.length === 0) {
-    // 该地区目前没有匹配节点时，保留模板的“直连”占位，避免输出空节点列表。
-    continue
+// 按地区顺序创建实际有成员的 A/B 组，保持不同订阅提供商的节点分开。
+const countryGroups = []
+for (const region of regions) {
+  for (const provider of providers) {
+    const tag = `${region.name}${provider.suffix}`
+    const members = groups.get(tag)
+    if (!members?.length) continue
+    if (existingTags.has(tag)) throw new Error(`模板中已有同名出站，无法创建国家组：${tag}`)
+    existingTags.add(tag)
+    countryGroups.push(tag)
+    if (provider.type === 'urltest') {
+      dynamicGroups.push({
+        type: 'urltest',
+        tag,
+        outbounds: members,
+        url: 'https://www.google.com/generate_204',
+        interval: '8m',
+        tolerance: 50,
+        idle_timeout: '15m',
+        interrupt_exist_connections: false
+      })
+    } else {
+      dynamicGroups.push({ type: 'selector', tag, outbounds: members, default: members[0] })
+    }
   }
-  // 替换占位节点，而不是在占位后追加，以免“直连”被误当成地区代理成员。
-  group.outbound.outbounds = group.members
-  // selector 的默认值设为该组首个节点；urltest 不设默认值，保留其测速配置。
-  if (group.outbound.type === 'selector') group.outbound.default = group.members[0]
-  else delete group.outbound.default
 }
 
-// 把所有筛选出的订阅出站追加到模板末尾。业务组、DNS、TUN 和路由规则保持模板原样。
-config.outbounds.push(...selected)
+// 将实际创建的国家组加入可选择的业务策略；规则集下载组保持只含用户指定的三个成员。
+const countryAwareSelectors = new Set(['GLOBAL', '主代理', 'OpenAI', '哔哩哔哩', 'Telegram'])
+for (const outbound of config.outbounds) {
+  if (!countryAwareSelectors.has(outbound.tag)) continue
+  outbound.outbounds = [...new Set([...outbound.outbounds, ...countryGroups])]
+}
+
+// 把动态国家组及筛选出的订阅出站追加到模板；DNS、TUN 和路由规则保持模板原样。
+config.outbounds.push(...dynamicGroups, ...selected)
 // Sub-Store 读取被赋值回 $content 的文本作为本脚本输出。
 $content = JSON.stringify(config, null, 2)
