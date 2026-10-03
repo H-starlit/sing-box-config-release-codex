@@ -35,6 +35,13 @@
         "192.168.0.0/16",
         "fc00::/7"
       ]
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41080,
+      "set_system_proxy": false
     }
   ],
   "route": {
