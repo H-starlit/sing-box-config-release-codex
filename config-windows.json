@@ -1,0 +1,694 @@
+{
+  "$schema": "../schema.json",
+  "log": {
+    "disabled": false,
+    "level": "warn",
+    "output": "boxlog.log",
+    "timestamp": true
+  },
+  "dns": {
+    "strategy": "prefer_ipv4",
+    "reverse_mapping": true,
+    "disable_cache": false,
+    "cache_capacity": 4096,
+    "optimistic": {
+      "enabled": true,
+      "timeout": "3d"
+    },
+    "servers": [
+      {
+        "type": "udp",
+        "tag": "dns-ali",
+        "server": "223.5.5.5"
+      },
+      {
+        "type": "udp",
+        "tag": "dns-sh-mobile",
+        "server": "211.136.150.66"
+      },
+      {
+        "type": "udp",
+        "tag": "dns-sh-telecom",
+        "server": "202.96.209.5"
+      },
+      {
+        "type": "https",
+        "tag": "dns-tencent",
+        "server": "119.29.29.29",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "doh.pub"
+        }
+      },
+      {
+        "type": "https",
+        "tag": "dns-cf-1",
+        "server": "1.1.1.1",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-cf-2",
+        "server": "1.0.0.1",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-google-1",
+        "server": "8.8.8.8",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-google-2",
+        "server": "8.8.4.4",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "local",
+        "tag": "dns-local"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-ali",
+        "remove_client_subnet": true,
+        "tag": "dns-ali-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-sh-mobile",
+        "remove_client_subnet": true,
+        "tag": "dns-sh-mobile-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-sh-telecom",
+        "remove_client_subnet": true,
+        "tag": "dns-sh-telecom-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-tencent",
+        "remove_client_subnet": true,
+        "tag": "dns-tencent-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-local",
+        "remove_client_subnet": true,
+        "tag": "dns-local-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-ali-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-sh-mobile-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-sh-telecom-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-tencent-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-local-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-cf-1",
+        "remove_client_subnet": true,
+        "tag": "dns-cf-1-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-cf-2",
+        "remove_client_subnet": true,
+        "tag": "dns-cf-2-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-google-1",
+        "remove_client_subnet": true,
+        "tag": "dns-google-1-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-google-2",
+        "remove_client_subnet": true,
+        "tag": "dns-google-2-response",
+        "timeout": "5s"
+      },
+      {
+        "match_response": "dns-cf-1-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-cf-2-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-google-1-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-google-2-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-cf-1-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-cf-2-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-google-1-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-google-2-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "action": "predefined",
+        "rcode": "SERVFAIL"
+      }
+    ]
+  },
+  "ntp": {
+    "enabled": false
+  },
+  "certificate": {
+    "store": "system"
+  },
+  "certificate_providers": [],
+  "http_clients": [
+    {
+      "tag": "默认规则集下载",
+      "engine": "go",
+      "version": 2,
+      "disable_version_fallback": false,
+      "detour": "自建"
+    }
+  ],
+  "network_namespaces": [],
+  "endpoints": [],
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41080,
+      "set_system_proxy": false
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "outbounds": [
+        "主代理",
+        "漏网之鱼",
+        "OpenAI",
+        "哔哩哔哩",
+        "Telegram",
+        "美国1",
+        "美国2",
+        "新加坡1",
+        "新加坡2",
+        "台湾1",
+        "台湾2",
+        "日本1",
+        "日本2",
+        "韩国1",
+        "韩国2",
+        "香港1",
+        "香港2",
+        "自建",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "主代理",
+      "outbounds": [
+        "直连",
+        "美国1",
+        "美国2",
+        "新加坡1",
+        "新加坡2",
+        "台湾1",
+        "台湾2",
+        "日本1",
+        "日本2",
+        "韩国1",
+        "韩国2",
+        "香港1",
+        "香港2",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "漏网之鱼",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "OpenAI",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "美国1",
+        "美国2",
+        "新加坡1",
+        "新加坡2",
+        "台湾1",
+        "台湾2",
+        "日本1",
+        "日本2",
+        "韩国1",
+        "韩国2",
+        "香港1",
+        "香港2",
+        "自建"
+      ],
+      "default": "自建"
+    },
+    {
+      "type": "selector",
+      "tag": "哔哩哔哩",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "美国1",
+        "美国2",
+        "新加坡1",
+        "新加坡2",
+        "台湾1",
+        "台湾2",
+        "日本1",
+        "日本2",
+        "韩国1",
+        "韩国2",
+        "香港1",
+        "香港2",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "direct",
+      "tag": "直连",
+      "domain_resolver": {
+        "server": "dns-ali",
+        "strategy": "prefer_ipv4"
+      }
+    },
+    {
+      "type": "urltest",
+      "tag": "美国1",
+      "outbounds": [
+        "直连"
+      ],
+      "url": "https://www.google.com/generate_204",
+      "interval": "8m",
+      "tolerance": 50,
+      "idle_timeout": "15m",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "美国2",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "urltest",
+      "tag": "新加坡1",
+      "outbounds": [
+        "直连"
+      ],
+      "url": "https://www.google.com/generate_204",
+      "interval": "8m",
+      "tolerance": 50,
+      "idle_timeout": "15m",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "新加坡2",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "urltest",
+      "tag": "台湾1",
+      "outbounds": [
+        "直连"
+      ],
+      "url": "https://www.google.com/generate_204",
+      "interval": "8m",
+      "tolerance": 50,
+      "idle_timeout": "15m",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "台湾2",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "urltest",
+      "tag": "日本1",
+      "outbounds": [
+        "直连"
+      ],
+      "url": "https://www.google.com/generate_204",
+      "interval": "8m",
+      "tolerance": 50,
+      "idle_timeout": "15m",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "日本2",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "urltest",
+      "tag": "韩国1",
+      "outbounds": [
+        "直连"
+      ],
+      "url": "https://www.google.com/generate_204",
+      "interval": "8m",
+      "tolerance": 50,
+      "idle_timeout": "15m",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "韩国2",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "urltest",
+      "tag": "香港1",
+      "outbounds": [
+        "直连"
+      ],
+      "url": "https://www.google.com/generate_204",
+      "interval": "8m",
+      "tolerance": 50,
+      "idle_timeout": "15m",
+      "interrupt_exist_connections": false
+    },
+    {
+      "type": "selector",
+      "tag": "香港2",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "自建",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "Telegram",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "美国1",
+        "美国2",
+        "新加坡1",
+        "新加坡2",
+        "台湾1",
+        "台湾2",
+        "日本1",
+        "日本2",
+        "韩国1",
+        "韩国2",
+        "香港1",
+        "香港2",
+        "自建"
+      ],
+      "default": "主代理"
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": "geosite-cn",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+        "http_client": "默认规则集下载",
+        "update_interval": "7d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-openai",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
+        "http_client": "默认规则集下载",
+        "update_interval": "7d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-bilibili",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
+        "http_client": "默认规则集下载",
+        "update_interval": "7d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-telegram",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
+        "http_client": "默认规则集下载",
+        "update_interval": "7d"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-cn",
+        "format": "binary",
+        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+        "http_client": "默认规则集下载",
+        "update_interval": "7d"
+      }
+    ],
+    "rules": [
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "outbound": "GLOBAL"
+      },
+      {
+        "network": "udp",
+        "port": 443,
+        "action": "reject"
+      },
+      {
+        "action": "sniff",
+        "timeout": "300ms"
+      },
+      {
+        "package_name": [
+          "com.openai.chatgpt"
+        ],
+        "action": "route",
+        "outbound": "OpenAI"
+      },
+      {
+        "package_name": [
+          "com.android.vending",
+          "com.google.android.gms"
+        ],
+        "action": "route",
+        "outbound": "主代理"
+      },
+      {
+        "domain_suffix": [
+          "openai.com",
+          "chatgpt.com",
+          "oaistatic.com",
+          "oaiusercontent.com",
+          "oaistatsig.com"
+        ],
+        "action": "route",
+        "outbound": "OpenAI"
+      },
+      {
+        "rule_set": [
+          "geosite-openai"
+        ],
+        "action": "route",
+        "outbound": "OpenAI"
+      },
+      {
+        "rule_set": [
+          "geosite-bilibili"
+        ],
+        "action": "route",
+        "outbound": "哔哩哔哩"
+      },
+      {
+        "rule_set": [
+          "geosite-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "rule_set": [
+          "geoip-cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      }
+    ],
+    "final": "漏网之鱼"
+  },
+  "services": [],
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "store_dns": true
+    }
+  }
+}
