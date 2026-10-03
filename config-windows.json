@@ -25,6 +25,7 @@
       ],
       "auto_route": true,
       "dns_mode": "hijack",
+      "strict_route": false,
       "udp_timeout": "5m",
       "udp_mapping": "endpoint_independent",
       "udp_filtering": "endpoint_independent",
