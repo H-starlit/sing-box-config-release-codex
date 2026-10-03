@@ -427,7 +427,7 @@
   },
   "log": {
     "disabled": false,
-    "level": "warn",
+    "level": "error",
     "output": "boxlog.log",
     "timestamp": true
   },
