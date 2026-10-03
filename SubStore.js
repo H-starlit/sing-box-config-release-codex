@@ -1,5 +1,5 @@
 // Sub-Store 文件脚本：把组合订阅中的节点并入 sing-box 配置模板。
-// 输入使用 Release 下载的严格 JSON config.json；不要直接输入 JSONC 注释文件。
+// 输入使用 Release 下载的 Android 严格 JSON config-android.json；不要直接输入 JSONC 注释文件。
 // 输出仍是完整 sing-box 配置，不是单独的节点列表。
 // 本脚本不读取本地文件系统；模板由 Sub-Store 文件脚本上下文通过 $content 或 $files 提供。
 // Sub-Store 文件脚本接口说明：https://sub-store-org.github.io/doc/file/scripts
@@ -8,7 +8,7 @@
 // $content / $files 是 Sub-Store 文件脚本环境提供的全局变量。
 const source = $content ?? $files[0]
 if (typeof source !== 'string' || !source.trim()) {
-  throw new Error('缺少公开配置模板内容；请将 Release 中的 config.json 作为脚本输入')
+  throw new Error('缺少公开配置模板内容；请将 Release 中的 config-android.json 作为脚本输入')
 }
 
 // Release 附件是工作流从 JSONC 生成的严格 JSON。
