@@ -103,17 +103,6 @@
         "timeout": "300ms"
       },
       {
-        "domain_suffix": [
-          "openai.com",
-          "chatgpt.com",
-          "oaistatic.com",
-          "oaiusercontent.com",
-          "oaistatsig.com"
-        ],
-        "action": "route",
-        "outbound": "OpenAI"
-      },
-      {
         "rule_set": [
           "geosite-openai"
         ],
