@@ -169,7 +169,7 @@ for (const region of regions) {
 }
 
 // 将实际创建的国家组加入可选择的业务策略；规则集下载组保持只含用户指定的三个成员。
-const countryAwareSelectors = new Set(['GLOBAL', '主代理', 'OpenAI', '哔哩哔哩', 'Telegram'])
+const countryAwareSelectors = new Set(['GLOBAL', '主代理', 'OpenAI', 'Telegram'])
 for (const outbound of config.outbounds) {
   if (!countryAwareSelectors.has(outbound.tag)) continue
   outbound.outbounds = [...new Set([...outbound.outbounds, ...countryGroups])]
