@@ -55,6 +55,14 @@
     "rule_set": [
       {
         "type": "remote",
+        "tag": "geosite-microsoft",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://github.com/SagerNet/sing-geosite/raw/refs/heads/rule-set/geosite-microsoft.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
         "tag": "geosite-cn",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
@@ -96,6 +104,13 @@
         "clash_mode": "Global",
         "action": "route",
         "outbound": "GLOBAL"
+      },
+      {
+        "rule_set": [
+          "geosite-microsoft"
+        ],
+        "action": "route",
+        "outbound": "Microsoft"
       },
       {
         "action": "sniff",
@@ -452,6 +467,15 @@
         "自建"
       ],
       "default": "自建"
+    },
+    {
+      "type": "selector",
+      "tag": "Microsoft",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "直连"
     },
     {
       "type": "direct",
