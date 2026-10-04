@@ -54,40 +54,32 @@
         "tag": "geosite-cn",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
-        "update_interval": "7d"
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-cn.srs",
+        "update_interval": "48h"
       },
       {
         "type": "remote",
         "tag": "geosite-openai",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
-        "update_interval": "7d"
-      },
-      {
-        "type": "remote",
-        "tag": "geosite-bilibili",
-        "format": "binary",
-        "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
-        "update_interval": "7d"
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-openai.srs",
+        "update_interval": "48h"
       },
       {
         "type": "remote",
         "tag": "geosite-telegram",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
-        "update_interval": "7d"
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-telegram.srs",
+        "update_interval": "48h"
       },
       {
         "type": "remote",
         "tag": "geoip-cn",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
-        "update_interval": "7d"
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-cn.srs",
+        "update_interval": "48h"
       }
     ],
     "rules": [
@@ -111,44 +103,11 @@
         "timeout": "300ms"
       },
       {
-        "package_name": [
-          "com.openai.chatgpt"
-        ],
-        "action": "route",
-        "outbound": "OpenAI"
-      },
-      {
-        "package_name": [
-          "com.android.vending",
-          "com.google.android.gms"
-        ],
-        "action": "route",
-        "outbound": "主代理"
-      },
-      {
-        "domain_suffix": [
-          "openai.com",
-          "chatgpt.com",
-          "oaistatic.com",
-          "oaiusercontent.com",
-          "oaistatsig.com"
-        ],
-        "action": "route",
-        "outbound": "OpenAI"
-      },
-      {
         "rule_set": [
           "geosite-openai"
         ],
         "action": "route",
         "outbound": "OpenAI"
-      },
-      {
-        "rule_set": [
-          "geosite-bilibili"
-        ],
-        "action": "route",
-        "outbound": "哔哩哔哩"
       },
       {
         "rule_set": [
@@ -461,7 +420,6 @@
         "主代理",
         "漏网之鱼",
         "OpenAI",
-        "哔哩哔哩",
         "Telegram",
         "自建",
         "直连"
@@ -497,16 +455,6 @@
       "default": "自建"
     },
     {
-      "type": "selector",
-      "tag": "哔哩哔哩",
-      "outbounds": [
-        "直连",
-        "主代理",
-        "自建"
-      ],
-      "default": "直连"
-    },
-    {
       "type": "direct",
       "tag": "直连",
       "domain_resolver": {
@@ -519,16 +467,6 @@
       "tag": "自建",
       "outbounds": [
         "直连"
-      ],
-      "default": "直连"
-    },
-    {
-      "type": "selector",
-      "tag": "规则集下载",
-      "outbounds": [
-        "主代理",
-        "直连",
-        "自建"
       ],
       "default": "直连"
     },
