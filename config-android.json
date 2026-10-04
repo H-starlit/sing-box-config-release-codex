@@ -472,6 +472,16 @@
     },
     {
       "type": "selector",
+      "tag": "规则集下载",
+      "outbounds": [
+        "主代理",
+        "直连",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
       "tag": "Telegram",
       "outbounds": [
         "直连",
