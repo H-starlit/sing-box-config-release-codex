@@ -54,7 +54,7 @@
         "tag": "geosite-cn",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-cn.srs",
         "update_interval": "7d"
       },
       {
@@ -62,7 +62,7 @@
         "tag": "geosite-openai",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-openai.srs",
         "update_interval": "7d"
       },
       {
@@ -70,7 +70,7 @@
         "tag": "geosite-bilibili",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-bilibili.srs",
         "update_interval": "7d"
       },
       {
@@ -78,7 +78,7 @@
         "tag": "geosite-telegram",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-telegram.srs",
         "update_interval": "7d"
       },
       {
@@ -86,7 +86,7 @@
         "tag": "geoip-cn",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-cn.srs",
         "update_interval": "7d"
       }
     ],
@@ -530,7 +530,7 @@
         "直连",
         "自建"
       ],
-      "default": "自建"
+      "default": "直连"
     },
     {
       "type": "selector",
