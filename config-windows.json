@@ -98,11 +98,6 @@
         "outbound": "GLOBAL"
       },
       {
-        "network": "udp",
-        "port": 443,
-        "action": "reject"
-      },
-      {
         "action": "sniff",
         "timeout": "300ms"
       },
