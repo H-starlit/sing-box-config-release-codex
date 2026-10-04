@@ -53,6 +53,7 @@
         "type": "remote",
         "tag": "geosite-cn",
         "format": "binary",
+        "initial_path": "规则集/占位符.srs",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
         "update_interval": "7d"
       },
@@ -60,6 +61,7 @@
         "type": "remote",
         "tag": "geosite-openai",
         "format": "binary",
+        "initial_path": "规则集/占位符.srs",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/openai.srs",
         "update_interval": "7d"
       },
@@ -67,6 +69,7 @@
         "type": "remote",
         "tag": "geosite-bilibili",
         "format": "binary",
+        "initial_path": "规则集/占位符.srs",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/bilibili.srs",
         "update_interval": "7d"
       },
@@ -74,6 +77,7 @@
         "type": "remote",
         "tag": "geosite-telegram",
         "format": "binary",
+        "initial_path": "规则集/占位符.srs",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/telegram.srs",
         "update_interval": "7d"
       },
@@ -81,6 +85,7 @@
         "type": "remote",
         "tag": "geoip-cn",
         "format": "binary",
+        "initial_path": "规则集/占位符.srs",
         "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
         "update_interval": "7d"
       }
