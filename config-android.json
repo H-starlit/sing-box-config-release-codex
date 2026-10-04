@@ -55,7 +55,7 @@
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-cn.srs",
-        "update_interval": "7d"
+        "update_interval": "48h"
       },
       {
         "type": "remote",
@@ -63,7 +63,7 @@
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-openai.srs",
-        "update_interval": "7d"
+        "update_interval": "48h"
       },
       {
         "type": "remote",
@@ -71,7 +71,7 @@
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-telegram.srs",
-        "update_interval": "7d"
+        "update_interval": "48h"
       },
       {
         "type": "remote",
@@ -79,7 +79,7 @@
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-cn.srs",
-        "update_interval": "7d"
+        "update_interval": "48h"
       }
     ],
     "rules": [
