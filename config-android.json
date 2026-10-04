@@ -111,14 +111,6 @@
         "timeout": "300ms"
       },
       {
-        "package_name": [
-          "com.android.vending",
-          "com.google.android.gms"
-        ],
-        "action": "route",
-        "outbound": "主代理"
-      },
-      {
         "domain_suffix": [
           "openai.com",
           "chatgpt.com",
