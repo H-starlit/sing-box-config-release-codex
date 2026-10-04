@@ -530,7 +530,7 @@
         "直连",
         "自建"
       ],
-      "default": "自建"
+      "default": "直连"
     },
     {
       "type": "selector",
