@@ -112,13 +112,6 @@
       },
       {
         "package_name": [
-          "com.openai.chatgpt"
-        ],
-        "action": "route",
-        "outbound": "OpenAI"
-      },
-      {
-        "package_name": [
           "com.android.vending",
           "com.google.android.gms"
         ],
