@@ -98,9 +98,13 @@ for (const proxy of produced) {
   // 只导入能从当前识别表确定国家的 A/B 节点；未识别国家不会被错误塞进其他国家组。
   if (!isCustom && matchingRegions.length === 0) continue
 
-  // 代理出站必须有类型；标签必须唯一，且不能与模板中已有出站重名。
-  if (typeof proxy.type !== 'string' || existingTags.has(tag)) {
-    throw new Error('节点类型无效或标签重复，请检查组合订阅')
+  // 订阅节点必须具备核心出站类型、服务器地址和有效端口；核心 `check`
+  // 可能不会拒绝缺少必填服务器字段的节点，因此在合成边界显式拦截。
+  // 标签也必须唯一，且不能与模板中已有出站重名。
+  if (typeof proxy.type !== 'string' || typeof proxy.server !== 'string' || !proxy.server.trim() ||
+      !Number.isInteger(proxy.server_port) || proxy.server_port < 1 || proxy.server_port > 65535 ||
+      existingTags.has(tag)) {
+    throw new Error('节点类型、服务器地址、端口无效或标签重复，请检查组合订阅')
   }
   existingTags.add(tag)
 
