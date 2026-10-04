@@ -58,7 +58,7 @@
         "tag": "geosite-microsoft",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
-        "url": "https://github.com/SagerNet/sing-geosite/raw/refs/heads/rule-set/geosite-microsoft.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-microsoft.srs",
         "update_interval": "48h"
       },
       {
