@@ -432,18 +432,6 @@
         "漏网之鱼",
         "OpenAI",
         "Telegram",
-        "美国1",
-        "美国2",
-        "新加坡1",
-        "新加坡2",
-        "台湾1",
-        "台湾2",
-        "日本1",
-        "日本2",
-        "韩国1",
-        "韩国2",
-        "香港1",
-        "香港2",
         "自建",
         "直连"
       ],
@@ -454,18 +442,6 @@
       "tag": "主代理",
       "outbounds": [
         "直连",
-        "美国1",
-        "美国2",
-        "新加坡1",
-        "新加坡2",
-        "台湾1",
-        "台湾2",
-        "日本1",
-        "日本2",
-        "韩国1",
-        "韩国2",
-        "香港1",
-        "香港2",
         "自建"
       ],
       "default": "直连"
@@ -485,18 +461,6 @@
       "outbounds": [
         "直连",
         "主代理",
-        "美国1",
-        "美国2",
-        "新加坡1",
-        "新加坡2",
-        "台湾1",
-        "台湾2",
-        "日本1",
-        "日本2",
-        "韩国1",
-        "韩国2",
-        "香港1",
-        "香港2",
         "自建"
       ],
       "default": "自建"
@@ -508,126 +472,6 @@
         "server": "dns-ali",
         "strategy": "prefer_ipv4"
       }
-    },
-    {
-      "type": "urltest",
-      "tag": "美国1",
-      "outbounds": [
-        "直连"
-      ],
-      "url": "https://www.google.com/generate_204",
-      "interval": "8m",
-      "tolerance": 50,
-      "idle_timeout": "15m",
-      "interrupt_exist_connections": false
-    },
-    {
-      "type": "selector",
-      "tag": "美国2",
-      "outbounds": [
-        "直连"
-      ],
-      "default": "直连"
-    },
-    {
-      "type": "urltest",
-      "tag": "新加坡1",
-      "outbounds": [
-        "直连"
-      ],
-      "url": "https://www.google.com/generate_204",
-      "interval": "8m",
-      "tolerance": 50,
-      "idle_timeout": "15m",
-      "interrupt_exist_connections": false
-    },
-    {
-      "type": "selector",
-      "tag": "新加坡2",
-      "outbounds": [
-        "直连"
-      ],
-      "default": "直连"
-    },
-    {
-      "type": "urltest",
-      "tag": "台湾1",
-      "outbounds": [
-        "直连"
-      ],
-      "url": "https://www.google.com/generate_204",
-      "interval": "8m",
-      "tolerance": 50,
-      "idle_timeout": "15m",
-      "interrupt_exist_connections": false
-    },
-    {
-      "type": "selector",
-      "tag": "台湾2",
-      "outbounds": [
-        "直连"
-      ],
-      "default": "直连"
-    },
-    {
-      "type": "urltest",
-      "tag": "日本1",
-      "outbounds": [
-        "直连"
-      ],
-      "url": "https://www.google.com/generate_204",
-      "interval": "8m",
-      "tolerance": 50,
-      "idle_timeout": "15m",
-      "interrupt_exist_connections": false
-    },
-    {
-      "type": "selector",
-      "tag": "日本2",
-      "outbounds": [
-        "直连"
-      ],
-      "default": "直连"
-    },
-    {
-      "type": "urltest",
-      "tag": "韩国1",
-      "outbounds": [
-        "直连"
-      ],
-      "url": "https://www.google.com/generate_204",
-      "interval": "8m",
-      "tolerance": 50,
-      "idle_timeout": "15m",
-      "interrupt_exist_connections": false
-    },
-    {
-      "type": "selector",
-      "tag": "韩国2",
-      "outbounds": [
-        "直连"
-      ],
-      "default": "直连"
-    },
-    {
-      "type": "urltest",
-      "tag": "香港1",
-      "outbounds": [
-        "直连"
-      ],
-      "url": "https://www.google.com/generate_204",
-      "interval": "8m",
-      "tolerance": 50,
-      "idle_timeout": "15m",
-      "interrupt_exist_connections": false
-    },
-    {
-      "type": "selector",
-      "tag": "香港2",
-      "outbounds": [
-        "直连"
-      ],
-      "default": "直连"
     },
     {
       "type": "selector",
@@ -643,18 +487,6 @@
       "outbounds": [
         "直连",
         "主代理",
-        "美国1",
-        "美国2",
-        "新加坡1",
-        "新加坡2",
-        "台湾1",
-        "台湾2",
-        "日本1",
-        "日本2",
-        "韩国1",
-        "韩国2",
-        "香港1",
-        "香港2",
         "自建"
       ],
       "default": "主代理"
