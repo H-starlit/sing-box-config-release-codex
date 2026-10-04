@@ -47,6 +47,10 @@
   ],
   "route": {
     "auto_detect_interface": true,
+    "default_domain_resolver": {
+      "server": "dns-ali",
+      "strategy": "prefer_ipv4"
+    },
     "default_http_client": "默认规则集下载",
     "rule_set": [
       {
