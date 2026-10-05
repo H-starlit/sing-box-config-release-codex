@@ -33,8 +33,7 @@
       "route_exclude_address": [
         "10.0.0.0/8",
         "172.16.0.0/12",
-        "192.168.0.0/16",
-        "fc00::/7"
+        "192.168.0.0/16"
       ]
     },
     {
@@ -56,7 +55,7 @@
     "auto_detect_interface": true,
     "default_domain_resolver": {
       "server": "dns-ali",
-      "strategy": "prefer_ipv4"
+      "strategy": "ipv4_only"
     },
     "default_http_client": "默认规则集下载",
     "rule_set": [
@@ -66,6 +65,14 @@
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-github.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-google",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-google.srs",
         "update_interval": "48h"
       },
       {
@@ -111,6 +118,10 @@
     ],
     "rules": [
       {
+        "ip_version": 6,
+        "action": "reject"
+      },
+      {
         "inbound": [
           "mixed-direct-in"
         ],
@@ -126,6 +137,13 @@
         "clash_mode": "Global",
         "action": "route",
         "outbound": "GLOBAL"
+      },
+      {
+        "rule_set": [
+          "geosite-google"
+        ],
+        "action": "route",
+        "outbound": "主代理"
       },
       {
         "rule_set": [
@@ -207,7 +225,7 @@
     }
   },
   "dns": {
-    "strategy": "prefer_ipv4",
+    "strategy": "ipv4_only",
     "reverse_mapping": true,
     "disable_cache": false,
     "cache_capacity": 4096,
@@ -529,7 +547,7 @@
       "tag": "直连",
       "domain_resolver": {
         "server": "dns-ali",
-        "strategy": "prefer_ipv4"
+        "strategy": "ipv4_only"
       }
     },
     {
