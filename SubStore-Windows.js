@@ -124,7 +124,7 @@ for (const proxy of produced) {
   const isIPv4 = typeof server === 'string' && /^\d{1,3}(?:\.\d{1,3}){3}$/.test(server)
   const isIPv6 = typeof server === 'string' && server.includes(':')
   if (typeof server === 'string' && server && !isIPv4 && !isIPv6 && !proxy.domain_resolver) {
-    proxy.domain_resolver = { server: 'dns-ali', strategy: 'prefer_ipv4' }
+    proxy.domain_resolver = { server: 'dns-ali', strategy: 'ipv4_only' }
   }
   selected.push(proxy)
 }
