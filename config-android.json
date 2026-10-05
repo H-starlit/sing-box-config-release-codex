@@ -55,6 +55,14 @@
     "rule_set": [
       {
         "type": "remote",
+        "tag": "geosite-github",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-github.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
         "tag": "geosite-cn",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
@@ -96,6 +104,13 @@
         "clash_mode": "Global",
         "action": "route",
         "outbound": "GLOBAL"
+      },
+      {
+        "rule_set": [
+          "geosite-github"
+        ],
+        "action": "route",
+        "outbound": "主代理"
       },
       {
         "action": "sniff",
