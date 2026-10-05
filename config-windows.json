@@ -176,7 +176,25 @@
     ],
     "final": "漏网之鱼"
   },
-  "services": [],
+  "services": [
+    {
+      "type": "api",
+      "tag": "sing-box-api",
+      "listen": "127.0.0.1",
+      "listen_port": 41008,
+      "secret": "123456",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "access_control_allow_private_network": true,
+      "dashboard": {
+        "enabled": true,
+        "download_url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/sing-box-dashboard-gh-pages.zip",
+        "update_interval": "168h",
+        "http_client": "默认规则集下载"
+      }
+    }
+  ],
   "experimental": {
     "clash_api": {
       "external_controller": "127.0.0.1:9090",
