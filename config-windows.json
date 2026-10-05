@@ -43,6 +43,13 @@
       "listen": "127.0.0.1",
       "listen_port": 41080,
       "set_system_proxy": false
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-direct-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41060,
+      "set_system_proxy": false
     }
   ],
   "route": {
@@ -103,6 +110,13 @@
       }
     ],
     "rules": [
+      {
+        "inbound": [
+          "mixed-direct-in"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
       {
         "clash_mode": "Direct",
         "action": "route",
