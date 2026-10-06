@@ -83,7 +83,15 @@
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-telegram.srs",
-        "update_interval": "48h"
+        "update_interval": "6h"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-telegram",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-telegram.srs",
+        "update_interval": "6h"
       },
       {
         "type": "remote",
@@ -113,6 +121,20 @@
         "outbound": "主代理"
       },
       {
+        "rule_set": [
+          "geoip-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
+        "rule_set": [
+          "geosite-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
         "action": "sniff",
         "timeout": "300ms"
       },
@@ -122,13 +144,6 @@
         ],
         "action": "route",
         "outbound": "OpenAI"
-      },
-      {
-        "rule_set": [
-          "geosite-telegram"
-        ],
-        "action": "route",
-        "outbound": "Telegram"
       },
       {
         "rule_set": [
