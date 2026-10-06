@@ -49,6 +49,13 @@
       "listen": "127.0.0.1",
       "listen_port": 41060,
       "set_system_proxy": false
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-main-proxy-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41070,
+      "set_system_proxy": false
     }
   ],
   "route": {
@@ -144,6 +151,13 @@
       {
         "ip_version": 6,
         "action": "reject"
+      },
+      {
+        "inbound": [
+          "mixed-main-proxy-in"
+        ],
+        "action": "route",
+        "outbound": "主代理"
       },
       {
         "inbound": [
