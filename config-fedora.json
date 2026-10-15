@@ -1,0 +1,661 @@
+{
+  "$schema": "../../schema.json",
+  "certificate": {
+    "store": "system"
+  },
+  "certificate_providers": [],
+  "http_clients": [
+    {
+      "tag": "默认规则集下载",
+      "engine": "go",
+      "version": 2,
+      "disable_version_fallback": false,
+      "detour": "规则集下载"
+    }
+  ],
+  "network_namespaces": [],
+  "endpoints": [],
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "address": [
+        "198.18.0.1/30",
+        "2001:db8::1/126"
+      ],
+      "auto_route": true,
+      "dns_mode": "hijack",
+      "strict_route": false,
+      "udp_timeout": "5m",
+      "udp_mapping": "endpoint_independent",
+      "udp_filtering": "endpoint_independent",
+      "udp_nat_max": 0,
+      "route_exclude_address": [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16"
+      ]
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41080,
+      "set_system_proxy": false
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-direct-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41060,
+      "set_system_proxy": false
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-main-proxy-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41070,
+      "set_system_proxy": false
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "default_domain_resolver": {
+      "server": "dns-ali",
+      "strategy": "ipv4_only"
+    },
+    "default_http_client": "默认规则集下载",
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": "geosite-category-game-platforms-download",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-category-game-platforms-download.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-steam",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-steam.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-github",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-github.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-google",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-google.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-microsoft",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-microsoft.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-cn",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-cn.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-openai",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-openai.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-telegram",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-telegram.srs",
+        "update_interval": "6h"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-telegram",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-telegram.srs",
+        "update_interval": "6h"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-cn",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-cn.srs",
+        "update_interval": "48h"
+      }
+    ],
+    "rules": [
+      {
+        "ip_version": 6,
+        "action": "reject"
+      },
+      {
+        "inbound": [
+          "mixed-main-proxy-in"
+        ],
+        "action": "route",
+        "outbound": "主代理"
+      },
+      {
+        "inbound": [
+          "mixed-direct-in"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "outbound": "GLOBAL"
+      },
+      {
+        "rule_set": [
+          "geosite-category-game-platforms-download"
+        ],
+        "action": "route",
+        "outbound": "游戏下载"
+      },
+      {
+        "rule_set": [
+          "geosite-steam"
+        ],
+        "action": "route",
+        "outbound": "Steam"
+      },
+      {
+        "rule_set": [
+          "geosite-google"
+        ],
+        "action": "route",
+        "outbound": "主代理"
+      },
+      {
+        "rule_set": [
+          "geosite-github"
+        ],
+        "action": "route",
+        "outbound": "主代理"
+      },
+      {
+        "rule_set": [
+          "geosite-microsoft"
+        ],
+        "action": "route",
+        "outbound": "Microsoft"
+      },
+      {
+        "rule_set": [
+          "geoip-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
+        "rule_set": [
+          "geosite-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
+        "action": "sniff",
+        "timeout": "300ms"
+      },
+      {
+        "rule_set": [
+          "geosite-openai"
+        ],
+        "action": "route",
+        "outbound": "OpenAI"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "rule_set": [
+          "geoip-cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      }
+    ],
+    "final": "漏网之鱼"
+  },
+  "services": [
+    {
+      "type": "api",
+      "tag": "sing-box-api",
+      "listen": "127.0.0.1",
+      "listen_port": 41008,
+      "secret": "123456",
+      "access_control_allow_origin": [
+        "*"
+      ],
+      "access_control_allow_private_network": true,
+      "dashboard": {
+        "enabled": true,
+        "download_url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/sing-box-dashboard-gh-pages.zip",
+        "update_interval": "168h",
+        "http_client": "默认规则集下载"
+      }
+    }
+  ],
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "store_dns": true
+    }
+  },
+  "dns": {
+    "strategy": "ipv4_only",
+    "reverse_mapping": true,
+    "disable_cache": false,
+    "cache_capacity": 4096,
+    "optimistic": {
+      "enabled": true,
+      "timeout": "3d"
+    },
+    "servers": [
+      {
+        "type": "udp",
+        "tag": "dns-ali",
+        "server": "223.5.5.5"
+      },
+      {
+        "type": "udp",
+        "tag": "dns-sh-mobile",
+        "server": "211.136.150.66"
+      },
+      {
+        "type": "udp",
+        "tag": "dns-sh-telecom",
+        "server": "202.96.209.5"
+      },
+      {
+        "type": "https",
+        "tag": "dns-tencent",
+        "server": "119.29.29.29",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "doh.pub"
+        }
+      },
+      {
+        "type": "https",
+        "tag": "dns-cf-1",
+        "server": "1.1.1.1",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-cf-2",
+        "server": "1.0.0.1",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-google-1",
+        "server": "8.8.8.8",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-google-2",
+        "server": "8.8.4.4",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "local",
+        "tag": "dns-local"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-ali",
+        "remove_client_subnet": true,
+        "tag": "dns-ali-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-sh-mobile",
+        "remove_client_subnet": true,
+        "tag": "dns-sh-mobile-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-sh-telecom",
+        "remove_client_subnet": true,
+        "tag": "dns-sh-telecom-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-tencent",
+        "remove_client_subnet": true,
+        "tag": "dns-tencent-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-local",
+        "remove_client_subnet": true,
+        "tag": "dns-local-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-ali-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-sh-mobile-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-sh-telecom-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-tencent-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-local-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-cf-1",
+        "remove_client_subnet": true,
+        "tag": "dns-cf-1-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-cf-2",
+        "remove_client_subnet": true,
+        "tag": "dns-cf-2-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-google-1",
+        "remove_client_subnet": true,
+        "tag": "dns-google-1-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-google-2",
+        "remove_client_subnet": true,
+        "tag": "dns-google-2-response",
+        "timeout": "5s"
+      },
+      {
+        "match_response": "dns-cf-1-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-cf-2-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-google-1-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-google-2-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-cf-1-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-cf-2-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-google-1-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-google-2-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "action": "predefined",
+        "rcode": "SERVFAIL"
+      }
+    ]
+  },
+  "ntp": {
+    "enabled": false
+  },
+  "log": {
+    "disabled": false,
+    "level": "error",
+    "output": "boxlog.log",
+    "timestamp": true
+  },
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "outbounds": [
+        "主代理",
+        "漏网之鱼",
+        "OpenAI",
+        "Telegram",
+        "Steam",
+        "游戏下载",
+        "自建",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "主代理",
+      "outbounds": [
+        "直连",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "漏网之鱼",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "OpenAI",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "自建"
+      ],
+      "default": "自建"
+    },
+    {
+      "type": "selector",
+      "tag": "Steam",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "游戏下载",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "Microsoft",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "direct",
+      "tag": "直连",
+      "domain_resolver": {
+        "server": "dns-ali",
+        "strategy": "ipv4_only"
+      }
+    },
+    {
+      "type": "selector",
+      "tag": "自建",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "规则集下载",
+      "outbounds": [
+        "主代理",
+        "直连",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "Telegram",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "自建"
+      ],
+      "default": "主代理"
+    }
+  ]
+}
