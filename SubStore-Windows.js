@@ -4,17 +4,54 @@
 // 本脚本不读取本地文件系统；模板由 Sub-Store 文件脚本上下文通过 $content 或 $files 提供。
 // Sub-Store 文件脚本接口说明：https://sub-store-org.github.io/doc/file/scripts
 
+const diagnosticPlatform = 'Windows'
+const MAX_DIAGNOSTIC_DETAILS = 20
+function safeTag(value) {
+  if (typeof value !== 'string') return '<非字符串标签>'
+  const clipped = value.length > 64 ? `${value.slice(0, 64)}…` : value
+  return JSON.stringify(clipped)
+}
+function actualType(value) {
+  if (value === null) return 'null'
+  if (Array.isArray(value)) return 'array'
+  return typeof value
+}
+function fieldIssue(node, field, expectedType, constraint, validator, missingCode, typeCode, valueCode) {
+  const exists = Object.prototype.hasOwnProperty.call(node, field)
+  const value = node[field]
+  if (!exists || value === undefined) return { code: missingCode, reason: '字段缺失', expected: expectedType, constraint, actual: 'missing' }
+  if (actualType(value) !== expectedType) return { code: typeCode, reason: '类型错误', expected: expectedType, constraint, actual: actualType(value) }
+  if (!validator(value)) return { code: valueCode, reason: '字段取值非法', expected: expectedType, constraint, actual: actualType(value) }
+  return null
+}
+function formatDiagnostics(errors, stats) {
+  const counts = {}
+  for (const error of errors) counts[error.code] = (counts[error.code] || 0) + 1
+  const details = errors.slice(0, MAX_DIAGNOSTIC_DETAILS).map(error =>
+    `[${error.code}] 平台=${diagnosticPlatform} 阶段=${error.stage} ${error.location || `节点索引=${error.index}`} tag=${safeTag(error.tag)} ${error.message}`)
+  const omitted = errors.length - details.length
+  const skipped = Object.entries(stats.skipped).map(([reason, count]) => `${reason}:${count}`).join(',') || '无'
+  const regions = Object.entries(stats.regions).map(([region, count]) => `${region}:${count}`).join(',')
+  const distribution = Object.entries(counts).map(([code, count]) => `${code}:${count}`).join(',')
+  return `SubStore 生成失败：平台=${diagnosticPlatform} 组合订阅=${collectionName} 总节点=${stats.total} A/B=${stats.ab} 自建=${stats.custom} 地区节点={${regions}} 正常跳过={${skipped}} 异常=${errors.length} 错误分布={${distribution}}${omitted ? `（另有 ${omitted} 条详情省略）` : ''}\n${details.join('\n')}`
+}
+
 // 优先使用当前文件脚本收到的主内容；若没有主内容，则取文件列表的第一个文件。
 // $content / $files 是 Sub-Store 文件脚本环境提供的全局变量。
-const source = $content ?? $files[0]
+const source = $content ?? $files?.[0]
 if (typeof source !== 'string' || !source.trim()) {
-  throw new Error('缺少 Windows 配置模板；请将 Release 中的 config-windows.json 作为脚本输入')
+  throw new Error(`平台=${diagnosticPlatform} 阶段=TEMPLATE_LOAD：缺少公开配置模板；请将 Release 中的 config-windows.json 作为脚本输入`)
 }
 
 // Release 附件是工作流从 JSONC 生成的严格 JSON。
-const config = JSON.parse(source)
+let config
+try {
+  config = JSON.parse(source)
+} catch (error) {
+  throw new Error(`平台=${diagnosticPlatform} 阶段=TEMPLATE_LOAD：严格 JSON 解析失败（异常类型=${error?.name || 'Error'}）；未输出原始异常内容`)
+}
 if (!config || !Array.isArray(config.outbounds)) {
-  throw new Error('模板缺少 outbounds 数组')
+  throw new Error(`平台=${diagnosticPlatform} 阶段=TEMPLATE_LOAD：模板缺少 outbounds 数组（实际类型=${actualType(config?.outbounds)}）`)
 }
 
 // 这里填写 Sub-Store 中已经存在的组合订阅名称，而不是订阅链接、文件名或节点名。
@@ -27,14 +64,19 @@ if (!collectionName.trim()) {
 // 从 Sub-Store 获取组合订阅的 sing-box 节点。
 // type: collection 表示读取组合订阅；platform 指定输出平台；
 // produceType: internal 表示在 Sub-Store 内部直接取得转换结果，不生成外部下载文件。
-const produced = await produceArtifact({
-  type: 'collection',
-  name: collectionName,
-  platform: 'sing-box',
-  produceType: 'internal'
-})
+let produced
+try {
+  produced = await produceArtifact({
+    type: 'collection',
+    name: collectionName,
+    platform: 'sing-box',
+    produceType: 'internal'
+  })
+} catch (error) {
+  throw new Error(`平台=${diagnosticPlatform} 阶段=COLLECTION_FETCH 组合订阅=${collectionName} 获取失败（异常类型=${error?.name || 'Error'}）；原始异常已省略以保护隐私`)
+}
 if (!Array.isArray(produced) || produced.length === 0) {
-  throw new Error('组合订阅没有返回 sing-box 节点')
+  throw new Error(`平台=${diagnosticPlatform} 阶段=COLLECTION_FETCH 组合订阅=${collectionName} 返回数据无效（预期=非空数组，实际类型=${actualType(produced)}，节点数=${Array.isArray(produced) ? produced.length : '不可用'}）`)
 }
 
 // 地区识别规则。节点标签去掉开头的 A- 或 B- 后，用这里的关键词判断地区。
@@ -67,13 +109,92 @@ const customTags = ['自建-VPS-WS', '自建-VPS-CFtunnel', '自建-VPS-直连']
 const groups = new Map()
 
 // existingTags 用于防止订阅节点标签与模板已有标签冲突，也防止订阅内部重复标签。
-const existingTags = new Set(config.outbounds.map(outbound => outbound.tag))
+let existingTags
+try {
+  existingTags = new Set(config.outbounds.map(outbound => outbound.tag))
+} catch (error) {
+  throw new Error(`平台=${diagnosticPlatform} 阶段=TEMPLATE_LOAD：读取模板出站标签失败（异常类型=${error?.name || 'Error'}）；原始异常已省略`)
+}
 // selected 保存最终允许并入模板的代理出站。
 const selected = []
 // dynamicGroups 与订阅节点分开保存，最终先写策略组再写其成员节点。
 const dynamicGroups = []
 // customMembers 记录组合订阅里找到的自建节点标签。
 const customMembers = []
+
+// 只读预检：沿用下方原有筛选边界，只把原本会失败的字段/重复标签错误汇总。
+// 发现错误后立即终止，不进入任何组生成或配置写入步骤。
+const validationErrors = []
+const firstTemplateTagIndex = new Map()
+config.outbounds.forEach((outbound, index) => {
+  const templateTag = outbound && typeof outbound === 'object' ? outbound.tag : undefined
+  if (typeof templateTag === 'string' && !firstTemplateTagIndex.has(templateTag)) firstTemplateTagIndex.set(templateTag, index)
+})
+const firstSubscriptionTagIndex = new Map()
+const diagnosticStats = {
+  total: produced.length,
+  ab: 0,
+  custom: 0,
+  regions: Object.fromEntries(regions.map(region => [region.name, 0])),
+  skipped: {}
+}
+const incrementSkip = reason => { diagnosticStats.skipped[reason] = (diagnosticStats.skipped[reason] || 0) + 1 }
+const addDiagnostic = (code, stage, index, tag, message, location) => {
+  validationErrors.push({ code, stage, index, tag, message, location })
+}
+for (let index = 0; index < produced.length; index++) {
+  const proxy = produced[index]
+  const tag = proxy && proxy.tag
+  if (typeof tag !== 'string') {
+    incrementSkip('标签缺失或非字符串（沿用原规则跳过）')
+    continue
+  }
+  const isCustom = customTags.includes(tag)
+  if (!isCustom && !/^[AB]-/.test(tag)) {
+    incrementSkip('非 A/B 且非自建节点')
+    continue
+  }
+  if (isCustom) diagnosticStats.custom++
+  else diagnosticStats.ab++
+  const provider = isCustom ? null : providers.find(item => tag.startsWith(item.prefix))
+  if (!isCustom && !provider) {
+    incrementSkip('未知提供商前缀（沿用原规则跳过）')
+    continue
+  }
+  const country = isCustom ? '' : tag.slice(2)
+  const matchingRegions = isCustom ? [] : regions.filter(region => region.patterns.some(pattern => pattern.test(country)))
+  if (!isCustom && matchingRegions.length === 0) {
+    incrementSkip('未识别地区（沿用原规则跳过）')
+    continue
+  }
+  if (matchingRegions.length === 1) diagnosticStats.regions[matchingRegions[0].name]++
+  if (matchingRegions.length > 1) {
+    addDiagnostic('AMBIGUOUS_REGION', 'NODE_FILTER', index, tag, '节点标签同时匹配多个地区；请调整地区标记')
+  }
+
+  const previousIndex = firstSubscriptionTagIndex.get(tag)
+  if (previousIndex !== undefined) {
+    addDiagnostic('DUPLICATE_TAG', 'NODE_VALIDATE', index, tag, `订阅内部标签重复；首次出现于节点索引=${previousIndex}`)
+  } else {
+    firstSubscriptionTagIndex.set(tag, index)
+  }
+  const templateIndex = firstTemplateTagIndex.get(tag)
+  if (templateIndex !== undefined) {
+    addDiagnostic('TEMPLATE_TAG_CONFLICT', 'NODE_VALIDATE', index, tag, `与模板已有标签冲突；首次出现于模板 outbounds 索引=${templateIndex}`)
+  }
+
+  const issues = [
+    ['type', fieldIssue(proxy, 'type', 'string', '字符串', value => typeof value === 'string', 'MISSING_TYPE', 'TYPE_TYPE', 'TYPE_VALUE')],
+    ['server', fieldIssue(proxy, 'server', 'string', '非空字符串', value => typeof value === 'string' && value.trim().length > 0, 'MISSING_SERVER', 'SERVER_TYPE', 'SERVER_EMPTY')],
+    ['server_port', fieldIssue(proxy, 'server_port', 'number', '整数且范围为 1..65535', value => Number.isInteger(value) && value >= 1 && value <= 65535, 'MISSING_PORT', 'PORT_TYPE', 'PORT_RANGE')]
+  ].filter(([, issue]) => issue)
+  for (const [field, issue] of issues) {
+    const numeric = issue.code === 'PORT_RANGE' && typeof proxy.server_port === 'number' ? `，实际值=${String(proxy.server_port).slice(0, 24)}` : ''
+    addDiagnostic(issue.code, 'NODE_VALIDATE', index, tag,
+      `${issue.reason}字段=${field}；预期类型=${issue.expected}，约束=${issue.constraint}，实际类型=${issue.actual}${numeric}`)
+  }
+}
+if (validationErrors.length) throw new Error(formatDiagnostics(validationErrors, diagnosticStats))
 
 // 逐个处理 Sub-Store 返回的 sing-box 出站。
 for (const proxy of produced) {
@@ -132,27 +253,31 @@ for (const proxy of produced) {
 // 组合订阅若提供了任意自建节点，则要求三个预期标签必须齐全，以免“自建”组被部分更新。
 if (customMembers.length) {
   if (customMembers.length !== customTags.length) {
-    throw new Error('组合订阅中的三个自建节点不完整')
+    const missing = customTags.filter(tag => !customMembers.includes(tag)).map(safeTag).join(', ')
+    throw new Error(`平台=${diagnosticPlatform} 阶段=GROUP_BUILD：组合订阅中的三个自建节点不完整；缺少标签=${missing}`)
   }
   const group = config.outbounds.filter(outbound => outbound && outbound.tag === '自建')
   // 模板中的自建组须唯一、类型须支持节点列表，且保留直连占位。
   if (group.length !== 1 || !['selector', 'urltest'].includes(group[0].type) || group[0].outbounds?.length !== 1 || group[0].outbounds[0] !== '直连') {
-    throw new Error('模板中的自建组不是预期的 selector/urltest 直连占位')
+    const actual = group.map(item => `type=${actualType(item.type)},成员数=${Array.isArray(item.outbounds) ? item.outbounds.length : actualType(item.outbounds)}`).join(';') || '未找到'
+    throw new Error(`平台=${diagnosticPlatform} 阶段=GROUP_BUILD：模板中的自建组不是预期的 selector/urltest 直连占位；匹配数=${group.length}，实际摘要=${actual}`)
   }
   // selector 有手动默认成员；urltest 自动测速，不使用 default 字段。
   group[0].outbounds = customTags.filter(tag => customMembers.includes(tag))
   if (group[0].type === 'selector') group[0].default = group[0].outbounds[0]
   else delete group[0].default
-}
-
-// 按地区顺序创建实际有成员的 A/B 组，保持不同订阅提供商的节点分开。
+}// 按地区顺序创建实际有成员的 A/B 组，保持不同订阅提供商的节点分开。
 const countryGroups = []
 for (const region of regions) {
   for (const provider of providers) {
     const tag = `${region.name}${provider.suffix}`
     const members = groups.get(tag)
     if (!members?.length) continue
-    if (existingTags.has(tag)) throw new Error(`模板中已有同名出站，无法创建国家组：${tag}`)
+    if (existingTags.has(tag)) {
+      const index = firstTemplateTagIndex.get(tag)
+      throw new Error(`平台=${diagnosticPlatform} 阶段=GROUP_BUILD：模板中已有同名出站，无法创建国家组；tag=${safeTag(tag)}，模板首次位置=outbounds[${index}]`)
+    }
+
     existingTags.add(tag)
     countryGroups.push(tag)
     if (provider.type === 'urltest') {
@@ -181,5 +306,14 @@ for (const outbound of config.outbounds) {
 
 // 把动态国家组及筛选出的订阅出站追加到模板；DNS、TUN 和路由规则保持模板原样。
 config.outbounds.push(...dynamicGroups, ...selected)
-// Sub-Store 读取被赋值回 $content 的文本作为本脚本输出。
-$content = JSON.stringify(config, null, 2)
+const skippedSummary = Object.entries(diagnosticStats.skipped).map(([reason, count]) => `${reason}:${count}`).join(',') || '无'
+const regionSummary = Object.entries(diagnosticStats.regions).map(([region, count]) => `${region}:${count}`).join(',')
+try {
+  $content = JSON.stringify(config, null, 2)
+} catch (error) {
+  throw new Error(`平台=${diagnosticPlatform} 阶段=OUTPUT_VALIDATE：配置 JSON 序列化失败（异常类型=${error?.name || 'Error'}）；原始异常已省略`)
+}
+if (typeof console !== 'undefined' && typeof console.info === 'function') {
+  // 成功日志只含汇总计数和筛选跳过原因，不序列化任何节点字段。
+  console.info(`[SubStore诊断] 平台=${diagnosticPlatform} 阶段=完成 组合订阅=${collectionName} 总节点=${diagnosticStats.total} A/B=${diagnosticStats.ab} 自建=${diagnosticStats.custom} 地区节点={${regionSummary}} 正常跳过={${skippedSummary}}`)
+}
