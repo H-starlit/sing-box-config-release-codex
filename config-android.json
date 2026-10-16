@@ -437,7 +437,7 @@
   },
   "log": {
     "disabled": false,
-    "level": "warn",
+    "level": "info",
     "output": "boxlog.log",
     "timestamp": true
   },
