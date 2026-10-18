@@ -95,26 +95,10 @@
       },
       {
         "type": "remote",
-        "tag": "geosite-perplexity",
-        "format": "binary",
-        "initial_path": "规则集/占位符.srs",
-        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-perplexity.srs",
-        "update_interval": "48h"
-      },
-      {
-        "type": "remote",
         "tag": "geosite-xai",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
         "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-xai.srs",
-        "update_interval": "48h"
-      },
-      {
-        "type": "remote",
-        "tag": "geosite-deepseek",
-        "format": "binary",
-        "initial_path": "规则集/占位符.srs",
-        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-deepseek.srs",
         "update_interval": "48h"
       },
       {
@@ -183,9 +167,7 @@
           "geosite-openai",
           "geosite-anthropic",
           "geosite-google-gemini",
-          "geosite-perplexity",
-          "geosite-xai",
-          "geosite-deepseek"
+          "geosite-xai"
         ],
         "action": "route",
         "outbound": "AI服务"
