@@ -14,7 +14,14 @@
     }
   ],
   "network_namespaces": [],
-  "endpoints": [],
+  "endpoints": [
+    {
+      "type": "tailscale",
+      "tag": "tailscale",
+      "ephemeral": false,
+      "detour": "直连"
+    }
+  ],
   "inbounds": [
     {
       "type": "tun",
@@ -165,6 +172,22 @@
     ],
     "rules": [
       {
+        "inbound": [
+          "tailscale"
+        ],
+        "ip_version": 4,
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "ip_version": 4,
+        "preferred_by": [
+          "tailscale"
+        ],
+        "action": "route",
+        "outbound": "tailscale"
+      },
+      {
         "ip_version": 6,
         "action": "reject"
       },
@@ -312,6 +335,12 @@
     },
     "servers": [
       {
+        "type": "tailscale",
+        "tag": "dns-tailscale",
+        "endpoint": "tailscale",
+        "accept_search_domain": true
+      },
+      {
         "type": "udp",
         "tag": "dns-ali",
         "server": "223.5.5.5"
@@ -386,6 +415,13 @@
       }
     ],
     "rules": [
+      {
+        "preferred_by": [
+          "dns-tailscale"
+        ],
+        "action": "route",
+        "server": "dns-tailscale"
+      },
       {
         "rule_set": [
           "geosite-cn"
