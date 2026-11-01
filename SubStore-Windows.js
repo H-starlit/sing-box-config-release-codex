@@ -238,16 +238,13 @@ for (const proxy of produced) {
     groups.get(groupTag).push(tag)
   }
 
-  // 服务商域名使用专用解析器；其他域名节点无自带解析器时补上 dns-ali。
-  // 这样节点域名解析可以使用模板中的阿里 UDP DNS，不必依赖该节点自身先连通。
-  // IPv4 地址和包含冒号的 IPv6 地址无需域名解析，因此不加此字段。
+  // B- 服务商的域名节点使用专用解析器；其他域名节点无自带解析器时补上 dns-ali。
+  // IPv4 地址和包含冒号的 IPv6 地址无需域名解析，不修改已有解析器。
   const server = proxy.server
   const isIPv4 = typeof server === 'string' && /^\d{1,3}(?:\.\d{1,3}){3}$/.test(server)
   const isIPv6 = typeof server === 'string' && server.includes(':')
-  // 原订阅的两个节点域名使用服务商 DoH；精确匹配，不改变其他节点。
-  // 第二台可通过将 dns-provider-1 改为 dns-provider-2 手动切换。
-  const providerDomains = ['n-02.nodecon.uk', 'n-26-p.nodecon.uk']
-  if (providerDomains.includes(server.toLowerCase().replace(/\.$/, ''))) {
+  // 通过组合订阅中的 B- 前缀识别服务商；第二台可手动切换。
+  if (provider?.prefix === 'B-' && !isIPv4 && !isIPv6) {
     if (!config.dns?.servers?.some(item => item.tag === 'dns-provider-1')) {
       throw new Error('模板缺少服务商 DNS，请更新对应平台的配置模板')
     }
