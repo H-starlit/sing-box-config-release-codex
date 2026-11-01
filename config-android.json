@@ -233,6 +233,26 @@
     },
     "servers": [
       {
+        "type": "https",
+        "tag": "dns-provider-1",
+        "server": "172.237.2.224",
+        "server_port": 2443,
+        "path": "/dns-query/f3008be6-7e70-434d-a834-76cb4d923ae2",
+        "tls": {
+          "enabled": true
+        }
+      },
+      {
+        "type": "https",
+        "tag": "dns-provider-2",
+        "server": "120.25.121.157",
+        "server_port": 2443,
+        "path": "/dns-query/f3008be6-7e70-434d-a834-76cb4d923ae2",
+        "tls": {
+          "enabled": true
+        }
+      },
+      {
         "type": "tailscale",
         "tag": "dns-tailscale",
         "endpoint": "tailscale",
