@@ -317,10 +317,11 @@ for (const outbound of config.outbounds) {
 // 出站自身的域名解析由上方 domain_resolver 指定；两台 DNS 不能作为一个出站的解析器数组。
 if (providerDomains.size) {
   if (!Array.isArray(config.dns?.rules)) throw new Error('模板缺少 DNS 规则数组')
-  config.dns.rules.unshift({
-    domain: [...providerDomains], action: 'route', server: 'dns-provider-1',
-    strategy: 'ipv4_only', disable_optimistic_cache: true
-  })
+  config.dns.rules.unshift(
+    // AAAA 返回空的成功响应，对应原配置关闭 IPv6 DNS。
+    { domain: [...providerDomains], query_type: 'AAAA', action: 'predefined', rcode: 'NOERROR' },
+    { domain: [...providerDomains], action: 'route', server: 'dns-provider-1', disable_optimistic_cache: true }
+  )
 }
 // 把动态国家组及筛选出的订阅出站追加到模板。
 config.outbounds.push(...dynamicGroups, ...selected)
