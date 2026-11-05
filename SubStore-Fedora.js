@@ -196,6 +196,8 @@ for (let index = 0; index < produced.length; index++) {
 }
 if (validationErrors.length) throw new Error(formatDiagnostics(validationErrors, diagnosticStats))
 
+// 只记录已导入的 B 节点域名；私有域名只进入用户生成的配置，不写入公开模板。
+const providerDomains = new Set()
 // 逐个处理 Sub-Store 返回的 sing-box 出站。
 for (const proxy of produced) {
   const tag = proxy && proxy.tag
@@ -243,12 +245,14 @@ for (const proxy of produced) {
   const server = proxy.server
   const isIPv4 = typeof server === 'string' && /^\d{1,3}(?:\.\d{1,3}){3}$/.test(server)
   const isIPv6 = typeof server === 'string' && server.includes(':')
-  // 通过组合订阅中的 B- 前缀识别服务商；第二台可手动切换。
+  // Clash 原配置关闭 IPv6；B 节点仅取 IPv4，并跳过模板的乐观缓存。
   if (provider?.prefix === 'B-' && !isIPv4 && !isIPv6) {
-    if (!config.dns?.servers?.some(item => item.tag === 'dns-provider-1')) {
+    if (!config.dns?.servers?.some(item => item.tag === 'dns-provider-1') ||
+        !config.dns?.servers?.some(item => item.tag === 'dns-provider-2')) {
       throw new Error('模板缺少服务商 DNS，请更新对应平台的配置模板')
     }
-    proxy.domain_resolver = { server: 'dns-provider-1', strategy: 'ipv4_only' }
+    proxy.domain_resolver = { server: 'dns-provider-1', strategy: 'ipv4_only', disable_optimistic_cache: true }
+    providerDomains.add(server.toLowerCase().replace(/\.$/, ''))
   } else if (typeof server === 'string' && server && !isIPv4 && !isIPv6 && !proxy.domain_resolver) {
     proxy.domain_resolver = { server: 'dns-ali', strategy: 'ipv4_only' }
   }
@@ -309,7 +313,16 @@ for (const outbound of config.outbounds) {
   outbound.outbounds = [...new Set([...outbound.outbounds, ...countryGroups])]
 }
 
-// 把动态国家组及筛选出的订阅出站追加到模板；DNS、TUN 和路由规则保持模板原样。
+// 对应 Clash nameserver-policy：普通 DNS 查询命中 B 节点域名时也交给专用 DNS。
+// 出站自身的域名解析由上方 domain_resolver 指定；两台 DNS 不能作为一个出站的解析器数组。
+if (providerDomains.size) {
+  if (!Array.isArray(config.dns?.rules)) throw new Error('模板缺少 DNS 规则数组')
+  config.dns.rules.unshift({
+    domain: [...providerDomains], action: 'route', server: 'dns-provider-1',
+    strategy: 'ipv4_only', disable_optimistic_cache: true
+  })
+}
+// 把动态国家组及筛选出的订阅出站追加到模板。
 config.outbounds.push(...dynamicGroups, ...selected)
 const skippedSummary = Object.entries(diagnosticStats.skipped).map(([reason, count]) => `${reason}:${count}`).join(',') || '无'
 const regionSummary = Object.entries(diagnosticStats.regions).map(([region, count]) => `${region}:${count}`).join(',')
