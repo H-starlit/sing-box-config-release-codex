@@ -1,0 +1,604 @@
+{
+  "$schema": "../../schema.json",
+  "certificate": {
+    "store": "system"
+  },
+  "certificate_providers": [],
+  "http_clients": [
+    {
+      "tag": "默认规则集下载",
+      "engine": "go",
+      "version": 2,
+      "disable_version_fallback": false,
+      "detour": "规则集下载"
+    }
+  ],
+  "network_namespaces": [],
+  "endpoints": [
+    {
+      "type": "tailscale",
+      "tag": "tailscale",
+      "ephemeral": false,
+      "detour": "直连"
+    }
+  ],
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "address": [
+        "198.18.0.1/30",
+        "2001:db8::1/126"
+      ],
+      "auto_route": true,
+      "dns_mode": "hijack",
+      "strict_route": false,
+      "udp_timeout": "5m",
+      "udp_mapping": "endpoint_independent",
+      "udp_filtering": "endpoint_independent",
+      "udp_nat_max": 0,
+      "route_exclude_address": [
+        "10.0.0.0/8",
+        "172.16.0.0/12",
+        "192.168.0.0/16",
+        "fc00::/7"
+      ]
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 41080,
+      "set_system_proxy": false
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "default_domain_resolver": {
+      "server": "dns-ali",
+      "strategy": "prefer_ipv4"
+    },
+    "default_http_client": "默认规则集下载",
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": "geosite-github",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-github.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-cn",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-cn.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-openai",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-openai.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-anthropic",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-anthropic.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-xai",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-xai.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-telegram",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-telegram.srs",
+        "update_interval": "6h"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-telegram",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-telegram.srs",
+        "update_interval": "6h"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-cn",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geoip-cn.srs",
+        "update_interval": "48h"
+      }
+    ],
+    "rules": [
+      {
+        "inbound": [
+          "tailscale"
+        ],
+        "ip_version": 4,
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "inbound": [
+          "tailscale"
+        ],
+        "ip_version": 6,
+        "action": "reject"
+      },
+      {
+        "ip_version": 4,
+        "preferred_by": [
+          "tailscale"
+        ],
+        "action": "route",
+        "outbound": "tailscale"
+      },
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "outbound": "GLOBAL"
+      },
+      {
+        "rule_set": [
+          "geosite-github"
+        ],
+        "action": "route",
+        "outbound": "主代理"
+      },
+      {
+        "rule_set": [
+          "geoip-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
+        "rule_set": [
+          "geosite-telegram"
+        ],
+        "action": "route",
+        "outbound": "Telegram"
+      },
+      {
+        "action": "sniff",
+        "timeout": "300ms"
+      },
+      {
+        "rule_set": [
+          "geosite-openai",
+          "geosite-anthropic",
+          "geosite-xai"
+        ],
+        "action": "route",
+        "outbound": "AI服务"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
+        "rule_set": [
+          "geoip-cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      }
+    ],
+    "final": "漏网之鱼"
+  },
+  "services": [],
+  "experimental": {
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "default_mode": "Rule"
+    },
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "store_dns": true
+    }
+  },
+  "dns": {
+    "strategy": "prefer_ipv4",
+    "reverse_mapping": true,
+    "disable_cache": false,
+    "cache_capacity": 4096,
+    "optimistic": {
+      "enabled": true,
+      "timeout": "3d"
+    },
+    "servers": [
+      {
+        "type": "https",
+        "tag": "dns-provider-1",
+        "server": "172.237.2.224",
+        "server_port": 2443,
+        "path": "/dns-query/f3008be6-7e70-434d-a834-76cb4d923ae2",
+        "tls": {
+          "enabled": true
+        }
+      },
+      {
+        "type": "https",
+        "tag": "dns-provider-2",
+        "server": "120.25.121.157",
+        "server_port": 2443,
+        "path": "/dns-query/f3008be6-7e70-434d-a834-76cb4d923ae2",
+        "tls": {
+          "enabled": true
+        }
+      },
+      {
+        "type": "tailscale",
+        "tag": "dns-tailscale",
+        "endpoint": "tailscale",
+        "accept_search_domain": true
+      },
+      {
+        "type": "udp",
+        "tag": "dns-ali",
+        "server": "223.5.5.5"
+      },
+      {
+        "type": "udp",
+        "tag": "dns-sh-mobile",
+        "server": "211.136.150.66"
+      },
+      {
+        "type": "udp",
+        "tag": "dns-sh-telecom",
+        "server": "202.96.209.5"
+      },
+      {
+        "type": "https",
+        "tag": "dns-tencent",
+        "server": "119.29.29.29",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "doh.pub"
+        }
+      },
+      {
+        "type": "https",
+        "tag": "dns-cf-1",
+        "server": "1.1.1.1",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-cf-2",
+        "server": "1.0.0.1",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-google-1",
+        "server": "8.8.8.8",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "https",
+        "tag": "dns-google-2",
+        "server": "8.8.4.4",
+        "path": "/dns-query",
+        "tls": {
+          "enabled": true,
+          "server_name": "dns.google"
+        },
+        "detour": "主代理"
+      },
+      {
+        "type": "local",
+        "tag": "dns-local"
+      }
+    ],
+    "rules": [
+      {
+        "preferred_by": [
+          "dns-tailscale"
+        ],
+        "action": "route",
+        "server": "dns-tailscale"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-ali",
+        "remove_client_subnet": true,
+        "tag": "dns-ali-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-sh-mobile",
+        "remove_client_subnet": true,
+        "tag": "dns-sh-mobile-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-sh-telecom",
+        "remove_client_subnet": true,
+        "tag": "dns-sh-telecom-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-tencent",
+        "remove_client_subnet": true,
+        "tag": "dns-tencent-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "action": "evaluate",
+        "server": "dns-local",
+        "remove_client_subnet": true,
+        "tag": "dns-local-response",
+        "timeout": "3s"
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-ali-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-sh-mobile-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-sh-telecom-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-tencent-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "rule_set": [
+          "geosite-cn"
+        ],
+        "match_response": "dns-local-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-cf-1",
+        "remove_client_subnet": true,
+        "tag": "dns-cf-1-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-cf-2",
+        "remove_client_subnet": true,
+        "tag": "dns-cf-2-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-google-1",
+        "remove_client_subnet": true,
+        "tag": "dns-google-1-response",
+        "timeout": "5s"
+      },
+      {
+        "action": "evaluate",
+        "server": "dns-google-2",
+        "remove_client_subnet": true,
+        "tag": "dns-google-2-response",
+        "timeout": "5s"
+      },
+      {
+        "match_response": "dns-cf-1-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-cf-2-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-google-1-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-google-2-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "match_response": "dns-cf-1-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-cf-2-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-google-1-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "match_response": "dns-google-2-response",
+        "response_rcode": "NXDOMAIN",
+        "action": "respond"
+      },
+      {
+        "action": "predefined",
+        "rcode": "SERVFAIL"
+      }
+    ]
+  },
+  "ntp": {
+    "enabled": false
+  },
+  "log": {
+    "disabled": false,
+    "level": "info",
+    "output": "boxlog.log",
+    "timestamp": true
+  },
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "GLOBAL",
+      "outbounds": [
+        "主代理",
+        "漏网之鱼",
+        "AI服务",
+        "Telegram",
+        "自建",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "主代理",
+      "outbounds": [
+        "直连",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "漏网之鱼",
+      "outbounds": [
+        "主代理",
+        "直连"
+      ],
+      "default": "主代理"
+    },
+    {
+      "type": "selector",
+      "tag": "AI服务",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "自建"
+      ],
+      "default": "自建"
+    },
+    {
+      "type": "direct",
+      "tag": "直连",
+      "domain_resolver": {
+        "server": "dns-ali",
+        "strategy": "prefer_ipv4"
+      }
+    },
+    {
+      "type": "selector",
+      "tag": "自建",
+      "outbounds": [
+        "直连"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "规则集下载",
+      "outbounds": [
+        "主代理",
+        "直连",
+        "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "Telegram",
+      "outbounds": [
+        "直连",
+        "主代理",
+        "自建"
+      ],
+      "default": "主代理"
+    }
+  ]
+}
