@@ -6,6 +6,8 @@
 
 - [Android 配置（正式版本）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config-android.json)
 - [Android SubStore 脚本（正式版本）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/SubStore-Android.js)
+- [AndroidTablet 配置（草稿）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config-android-tablet.json)
+- [AndroidTablet SubStore 脚本（草稿）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/SubStore-AndroidTablet.js)
 - [Windows 配置（正式版本）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config-windows.json)
 - [Windows SubStore 脚本（正式版本）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/SubStore-Windows.js)
 - [Fedora 配置（草稿）](https://github.com/H-starlit/sing-box-config-release-codex/blob/main/config-fedora.json)
@@ -14,8 +16,11 @@
 
 ## 最新 Release 附件
 
+- [platforms.json](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/platforms.json)
 - [config-android.json](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config-android.json)
 - [SubStore-Android.js](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/SubStore-Android.js)
+- [config-android-tablet.json](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config-android-tablet.json)
+- [SubStore-AndroidTablet.js](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/SubStore-AndroidTablet.js)
 - [config-windows.json](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config-windows.json)
 - [SubStore-Windows.js](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/SubStore-Windows.js)
 - [config-fedora.json](https://github.com/H-starlit/sing-box-config-release-codex/releases/latest/download/config-fedora.json)
