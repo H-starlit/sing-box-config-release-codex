@@ -75,6 +75,14 @@
     "rule_set": [
       {
         "type": "remote",
+        "tag": "geosite-cn-dustin",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-cn-dustin.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
         "tag": "geosite-category-game-platforms-download",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
@@ -279,7 +287,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "action": "route",
         "outbound": "直连"
@@ -444,7 +453,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "action": "evaluate",
         "server": "dns-ali",
@@ -454,7 +464,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "action": "evaluate",
         "server": "dns-sh-mobile",
@@ -464,7 +475,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "action": "evaluate",
         "server": "dns-sh-telecom",
@@ -474,7 +486,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "action": "evaluate",
         "server": "dns-tencent",
@@ -484,7 +497,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "action": "evaluate",
         "server": "dns-local",
@@ -494,7 +508,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "match_response": "dns-ali-response",
         "response_rcode": "NOERROR",
@@ -503,7 +518,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "match_response": "dns-sh-mobile-response",
         "response_rcode": "NOERROR",
@@ -512,7 +528,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "match_response": "dns-sh-telecom-response",
         "response_rcode": "NOERROR",
@@ -521,7 +538,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "match_response": "dns-tencent-response",
         "response_rcode": "NOERROR",
@@ -530,7 +548,8 @@
       },
       {
         "rule_set": [
-          "geosite-cn"
+          "geosite-cn",
+          "geosite-cn-dustin"
         ],
         "match_response": "dns-local-response",
         "response_rcode": "NOERROR",
