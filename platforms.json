@@ -1,0 +1,6 @@
+[
+  { "id": "android", "directory": "Android", "name": "Android", "stage": "正式版本" },
+  { "id": "android-tablet", "directory": "AndroidTablet", "name": "AndroidTablet", "stage": "草稿" },
+  { "id": "windows", "directory": "Windows", "name": "Windows", "stage": "正式版本" },
+  { "id": "fedora", "directory": "Fedora", "name": "Fedora", "stage": "草稿" }
+]
