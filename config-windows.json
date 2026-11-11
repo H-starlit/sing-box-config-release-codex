@@ -364,6 +364,16 @@
         }
       },
       {
+        "type": "https",
+        "tag": "dns-provider-3",
+        "server": "2.56.98.127",
+        "server_port": 2443,
+        "path": "/dns-query/f3008be6-7e70-434d-a834-76cb4d923ae2",
+        "tls": {
+          "enabled": true
+        }
+      },
+      {
         "type": "tailscale",
         "tag": "dns-tailscale",
         "endpoint": "tailscale",
