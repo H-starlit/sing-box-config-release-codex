@@ -14,7 +14,14 @@
     }
   ],
   "network_namespaces": [],
-  "endpoints": [],
+  "endpoints": [
+    {
+      "type": "tailscale",
+      "tag": "tailscale",
+      "ephemeral": false,
+      "detour": "直连"
+    }
+  ],
   "inbounds": [
     {
       "type": "tun",
@@ -132,6 +139,22 @@
       },
       {
         "type": "remote",
+        "tag": "geosite-anthropic",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-anthropic.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-xai",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-xai.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
         "tag": "geosite-telegram",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
@@ -157,12 +180,23 @@
     ],
     "rules": [
       {
-        "ip_version": 6,
-        "action": "reject"
+        "inbound": [
+          "tailscale"
+        ],
+        "ip_version": 4,
+        "action": "route",
+        "outbound": "直连"
       },
       {
-        "network": "udp",
-        "port": 443,
+        "ip_version": 4,
+        "preferred_by": [
+          "tailscale"
+        ],
+        "action": "route",
+        "outbound": "tailscale"
+      },
+      {
+        "ip_version": 6,
         "action": "reject"
       },
       {
@@ -204,6 +238,19 @@
         "outbound": "Steam"
       },
       {
+        "action": "sniff",
+        "timeout": "300ms"
+      },
+      {
+        "rule_set": [
+          "geosite-openai",
+          "geosite-anthropic",
+          "geosite-xai"
+        ],
+        "action": "route",
+        "outbound": "AI服务"
+      },
+      {
         "rule_set": [
           "geosite-google"
         ],
@@ -237,17 +284,6 @@
         ],
         "action": "route",
         "outbound": "Telegram"
-      },
-      {
-        "action": "sniff",
-        "timeout": "300ms"
-      },
-      {
-        "rule_set": [
-          "geosite-openai"
-        ],
-        "action": "route",
-        "outbound": "OpenAI"
       },
       {
         "rule_set": [
@@ -338,6 +374,12 @@
         }
       },
       {
+        "type": "tailscale",
+        "tag": "dns-tailscale",
+        "endpoint": "tailscale",
+        "accept_search_domain": true
+      },
+      {
         "type": "udp",
         "tag": "dns-ali",
         "server": "223.5.5.5"
@@ -412,6 +454,13 @@
       }
     ],
     "rules": [
+      {
+        "preferred_by": [
+          "dns-tailscale"
+        ],
+        "action": "route",
+        "server": "dns-tailscale"
+      },
       {
         "rule_set": [
           "geosite-cn",
@@ -611,7 +660,7 @@
       "outbounds": [
         "主代理",
         "漏网之鱼",
-        "OpenAI",
+        "AI服务",
         "Telegram",
         "Steam",
         "游戏下载",
@@ -640,7 +689,7 @@
     },
     {
       "type": "selector",
-      "tag": "OpenAI",
+      "tag": "AI服务",
       "outbounds": [
         "直连",
         "主代理",
