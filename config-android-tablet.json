@@ -176,6 +176,17 @@
         "outbound": "GLOBAL"
       },
       {
+        "action": "sniff",
+        "timeout": "300ms"
+      },
+      {
+        "domain_suffix": [
+          ".cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
         "rule_set": [
           "geosite-github"
         ],
@@ -195,10 +206,6 @@
         ],
         "action": "route",
         "outbound": "Telegram"
-      },
-      {
-        "action": "sniff",
-        "timeout": "300ms"
       },
       {
         "rule_set": [
