@@ -236,6 +236,13 @@
         "timeout": "300ms"
       },
       {
+        "domain": [
+          "play.simpfun.cn"
+        ],
+        "action": "route",
+        "outbound": "直连"
+      },
+      {
         "domain_suffix": [
           ".cn"
         ],
