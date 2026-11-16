@@ -237,10 +237,6 @@
   },
   "services": [],
   "experimental": {
-    "clash_api": {
-      "external_controller": "127.0.0.1:9090",
-      "default_mode": "Rule"
-    },
     "cache_file": {
       "enabled": true,
       "path": "cache.db",
