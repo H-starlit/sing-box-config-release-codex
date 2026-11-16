@@ -463,9 +463,20 @@
         "server": "dns-tailscale"
       },
       {
-        "rule_set": [
-          "geosite-cn",
-          "geosite-cn-dustin"
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "rule_set": [
+              "geosite-cn",
+              "geosite-cn-dustin"
+            ]
+          },
+          {
+            "domain_suffix": [
+              ".cn"
+            ]
+          }
         ],
         "action": "evaluate",
         "server": "dns-ali",
@@ -474,9 +485,20 @@
         "timeout": "3s"
       },
       {
-        "rule_set": [
-          "geosite-cn",
-          "geosite-cn-dustin"
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "rule_set": [
+              "geosite-cn",
+              "geosite-cn-dustin"
+            ]
+          },
+          {
+            "domain_suffix": [
+              ".cn"
+            ]
+          }
         ],
         "action": "evaluate",
         "server": "dns-sh-mobile",
@@ -485,9 +507,20 @@
         "timeout": "3s"
       },
       {
-        "rule_set": [
-          "geosite-cn",
-          "geosite-cn-dustin"
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "rule_set": [
+              "geosite-cn",
+              "geosite-cn-dustin"
+            ]
+          },
+          {
+            "domain_suffix": [
+              ".cn"
+            ]
+          }
         ],
         "action": "evaluate",
         "server": "dns-sh-telecom",
@@ -496,9 +529,20 @@
         "timeout": "3s"
       },
       {
-        "rule_set": [
-          "geosite-cn",
-          "geosite-cn-dustin"
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "rule_set": [
+              "geosite-cn",
+              "geosite-cn-dustin"
+            ]
+          },
+          {
+            "domain_suffix": [
+              ".cn"
+            ]
+          }
         ],
         "action": "evaluate",
         "server": "dns-tencent",
@@ -507,9 +551,20 @@
         "timeout": "3s"
       },
       {
-        "rule_set": [
-          "geosite-cn",
-          "geosite-cn-dustin"
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "rule_set": [
+              "geosite-cn",
+              "geosite-cn-dustin"
+            ]
+          },
+          {
+            "domain_suffix": [
+              ".cn"
+            ]
+          }
         ],
         "action": "evaluate",
         "server": "dns-local",
@@ -528,9 +583,27 @@
         "race": true
       },
       {
+        "domain_suffix": [
+          ".cn"
+        ],
+        "match_response": "dns-ali-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
         "rule_set": [
           "geosite-cn",
           "geosite-cn-dustin"
+        ],
+        "match_response": "dns-sh-mobile-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "domain_suffix": [
+          ".cn"
         ],
         "match_response": "dns-sh-mobile-response",
         "response_rcode": "NOERROR",
@@ -548,6 +621,15 @@
         "race": true
       },
       {
+        "domain_suffix": [
+          ".cn"
+        ],
+        "match_response": "dns-sh-telecom-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
         "rule_set": [
           "geosite-cn",
           "geosite-cn-dustin"
@@ -558,9 +640,27 @@
         "race": true
       },
       {
+        "domain_suffix": [
+          ".cn"
+        ],
+        "match_response": "dns-tencent-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
         "rule_set": [
           "geosite-cn",
           "geosite-cn-dustin"
+        ],
+        "match_response": "dns-local-response",
+        "response_rcode": "NOERROR",
+        "action": "respond",
+        "race": true
+      },
+      {
+        "domain_suffix": [
+          ".cn"
         ],
         "match_response": "dns-local-response",
         "response_rcode": "NOERROR",
