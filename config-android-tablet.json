@@ -191,7 +191,7 @@
           "geosite-github"
         ],
         "action": "route",
-        "outbound": "主代理v6.27"
+        "outbound": "主代理v6.28"
       },
       {
         "rule_set": [
@@ -323,7 +323,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.27"
+        "detour": "主代理v6.28"
       },
       {
         "type": "https",
@@ -334,7 +334,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.27"
+        "detour": "主代理v6.28"
       },
       {
         "type": "https",
@@ -345,7 +345,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.27"
+        "detour": "主代理v6.28"
       },
       {
         "type": "https",
@@ -356,7 +356,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.27"
+        "detour": "主代理v6.28"
       },
       {
         "type": "local",
@@ -668,18 +668,18 @@
       "type": "selector",
       "tag": "GLOBAL",
       "outbounds": [
-        "主代理v6.27",
+        "主代理v6.28",
         "漏网之鱼",
         "AI服务",
         "Telegram",
         "自建",
         "直连"
       ],
-      "default": "主代理v6.27"
+      "default": "主代理v6.28"
     },
     {
       "type": "selector",
-      "tag": "主代理v6.27",
+      "tag": "主代理v6.28",
       "outbounds": [
         "直连",
         "自建"
@@ -690,17 +690,17 @@
       "type": "selector",
       "tag": "漏网之鱼",
       "outbounds": [
-        "主代理v6.27",
+        "主代理v6.28",
         "直连"
       ],
-      "default": "主代理v6.27"
+      "default": "主代理v6.28"
     },
     {
       "type": "selector",
       "tag": "AI服务",
       "outbounds": [
         "直连",
-        "主代理v6.27",
+        "主代理v6.28",
         "自建"
       ],
       "default": "自建"
@@ -725,7 +725,7 @@
       "type": "selector",
       "tag": "规则集下载",
       "outbounds": [
-        "主代理v6.27",
+        "主代理v6.28",
         "直连",
         "自建"
       ],
@@ -736,10 +736,10 @@
       "tag": "Telegram",
       "outbounds": [
         "直连",
-        "主代理v6.27",
+        "主代理v6.28",
         "自建"
       ],
-      "default": "主代理v6.27"
+      "default": "主代理v6.28"
     }
   ]
 }
