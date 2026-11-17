@@ -212,7 +212,7 @@
           "mixed-main-proxy-in"
         ],
         "action": "route",
-        "outbound": "主代理"
+        "outbound": "主代理v6.26"
       },
       {
         "inbound": [
@@ -278,14 +278,14 @@
           "geosite-google"
         ],
         "action": "route",
-        "outbound": "主代理"
+        "outbound": "主代理v6.26"
       },
       {
         "rule_set": [
           "geosite-github"
         ],
         "action": "route",
-        "outbound": "主代理"
+        "outbound": "主代理v6.26"
       },
       {
         "rule_set": [
@@ -414,7 +414,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理"
+        "detour": "主代理v6.26"
       },
       {
         "type": "https",
@@ -425,7 +425,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理"
+        "detour": "主代理v6.26"
       },
       {
         "type": "https",
@@ -436,7 +436,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理"
+        "detour": "主代理v6.26"
       },
       {
         "type": "https",
@@ -447,7 +447,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理"
+        "detour": "主代理v6.26"
       },
       {
         "type": "local",
@@ -759,7 +759,7 @@
       "type": "selector",
       "tag": "GLOBAL",
       "outbounds": [
-        "主代理",
+        "主代理v6.26",
         "漏网之鱼",
         "AI服务",
         "Telegram",
@@ -768,11 +768,11 @@
         "自建",
         "直连"
       ],
-      "default": "主代理"
+      "default": "主代理v6.26"
     },
     {
       "type": "selector",
-      "tag": "主代理",
+      "tag": "主代理v6.26",
       "outbounds": [
         "直连",
         "自建"
@@ -783,17 +783,17 @@
       "type": "selector",
       "tag": "漏网之鱼",
       "outbounds": [
-        "主代理",
+        "主代理v6.26",
         "直连"
       ],
-      "default": "主代理"
+      "default": "主代理v6.26"
     },
     {
       "type": "selector",
       "tag": "AI服务",
       "outbounds": [
         "直连",
-        "主代理",
+        "主代理v6.26",
         "自建"
       ],
       "default": "自建"
@@ -802,16 +802,16 @@
       "type": "selector",
       "tag": "Steam",
       "outbounds": [
-        "主代理",
+        "主代理v6.26",
         "直连"
       ],
-      "default": "主代理"
+      "default": "主代理v6.26"
     },
     {
       "type": "selector",
       "tag": "游戏下载",
       "outbounds": [
-        "主代理",
+        "主代理v6.26",
         "直连"
       ],
       "default": "直连"
@@ -820,7 +820,7 @@
       "type": "selector",
       "tag": "Microsoft",
       "outbounds": [
-        "主代理",
+        "主代理v6.26",
         "直连"
       ],
       "default": "直连"
@@ -845,7 +845,7 @@
       "type": "selector",
       "tag": "规则集下载",
       "outbounds": [
-        "主代理",
+        "主代理v6.26",
         "直连",
         "自建"
       ],
@@ -856,10 +856,10 @@
       "tag": "Telegram",
       "outbounds": [
         "直连",
-        "主代理",
+        "主代理v6.26",
         "自建"
       ],
-      "default": "主代理"
+      "default": "主代理v6.26"
     }
   ]
 }
