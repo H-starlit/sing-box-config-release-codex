@@ -308,7 +308,15 @@ for (const region of regions) {
 }
 
 // 将实际创建的国家组加入可选择的业务策略；规则集下载组保持只含用户指定的三个成员。
-const countryAwareSelectors = new Set(['GLOBAL', '主代理', 'AI服务', '哔哩哔哩', 'Telegram'])
+// 已版本化的主代理仍为默认直连，且须收到动态国家组成员。
+const versionedPrimary = config.outbounds.filter(outbound =>
+  typeof outbound?.tag === 'string' &&
+  (outbound.tag === '主代理' || /^主代理v[0-9]+\.[0-9]+$/.test(outbound.tag)))
+if (versionedPrimary.length !== 1 || versionedPrimary[0].type !== 'selector' ||
+    versionedPrimary[0].default !== '直连') {
+  throw new Error('模板缺少唯一且默认直连的主代理（兼容旧模板或版本化模板）')
+}
+const countryAwareSelectors = new Set(['GLOBAL', versionedPrimary[0].tag, 'AI服务', '哔哩哔哩', 'Telegram'])
 for (const outbound of config.outbounds) {
   if (!countryAwareSelectors.has(outbound.tag)) continue
   outbound.outbounds = [...new Set([...outbound.outbounds, ...countryGroups])]
