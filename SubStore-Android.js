@@ -254,7 +254,8 @@ for (const proxy of produced) {
     proxy.domain_resolver = { server: 'dns-provider-1', strategy: 'ipv4_only', disable_optimistic_cache: true }
     providerDomains.add(server.toLowerCase().replace(/\.$/, ''))
   } else if (typeof server === 'string' && server && !isIPv4 && !isIPv6 && !proxy.domain_resolver) {
-    proxy.domain_resolver = { server: 'dns-ali', strategy: 'prefer_ipv4' }
+    // 节点地址过期后同步刷新，避免换址后的首次拨号继续使用旧 IP。
+    proxy.domain_resolver = { server: 'dns-ali', strategy: 'prefer_ipv4', disable_optimistic_cache: true }
   }
   selected.push(proxy)
 }
