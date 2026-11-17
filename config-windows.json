@@ -69,7 +69,7 @@
     "auto_detect_interface": true,
     "default_domain_resolver": {
       "server": "dns-ali",
-      "strategy": "ipv4_only"
+      "strategy": "prefer_ipv4"
     },
     "default_http_client": "默认规则集下载",
     "rule_set": [
@@ -204,6 +204,9 @@
         "outbound": "tailscale"
       },
       {
+        "inbound": [
+          "tailscale"
+        ],
         "ip_version": 6,
         "action": "reject"
       },
@@ -212,7 +215,7 @@
           "mixed-main-proxy-in"
         ],
         "action": "route",
-        "outbound": "主代理v6.26"
+        "outbound": "主代理v6.27"
       },
       {
         "inbound": [
@@ -278,14 +281,14 @@
           "geosite-google"
         ],
         "action": "route",
-        "outbound": "主代理v6.26"
+        "outbound": "主代理v6.27"
       },
       {
         "rule_set": [
           "geosite-github"
         ],
         "action": "route",
-        "outbound": "主代理v6.26"
+        "outbound": "主代理v6.27"
       },
       {
         "rule_set": [
@@ -335,7 +338,7 @@
     }
   },
   "dns": {
-    "strategy": "ipv4_only",
+    "strategy": "prefer_ipv4",
     "reverse_mapping": true,
     "disable_cache": false,
     "cache_capacity": 4096,
@@ -414,7 +417,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.26"
+        "detour": "主代理v6.27"
       },
       {
         "type": "https",
@@ -425,7 +428,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.26"
+        "detour": "主代理v6.27"
       },
       {
         "type": "https",
@@ -436,7 +439,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.26"
+        "detour": "主代理v6.27"
       },
       {
         "type": "https",
@@ -447,7 +450,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.26"
+        "detour": "主代理v6.27"
       },
       {
         "type": "local",
@@ -759,7 +762,7 @@
       "type": "selector",
       "tag": "GLOBAL",
       "outbounds": [
-        "主代理v6.26",
+        "主代理v6.27",
         "漏网之鱼",
         "AI服务",
         "Telegram",
@@ -768,11 +771,11 @@
         "自建",
         "直连"
       ],
-      "default": "主代理v6.26"
+      "default": "主代理v6.27"
     },
     {
       "type": "selector",
-      "tag": "主代理v6.26",
+      "tag": "主代理v6.27",
       "outbounds": [
         "直连",
         "自建"
@@ -783,17 +786,17 @@
       "type": "selector",
       "tag": "漏网之鱼",
       "outbounds": [
-        "主代理v6.26",
+        "主代理v6.27",
         "直连"
       ],
-      "default": "主代理v6.26"
+      "default": "主代理v6.27"
     },
     {
       "type": "selector",
       "tag": "AI服务",
       "outbounds": [
         "直连",
-        "主代理v6.26",
+        "主代理v6.27",
         "自建"
       ],
       "default": "自建"
@@ -802,16 +805,16 @@
       "type": "selector",
       "tag": "Steam",
       "outbounds": [
-        "主代理v6.26",
+        "主代理v6.27",
         "直连"
       ],
-      "default": "主代理v6.26"
+      "default": "主代理v6.27"
     },
     {
       "type": "selector",
       "tag": "游戏下载",
       "outbounds": [
-        "主代理v6.26",
+        "主代理v6.27",
         "直连"
       ],
       "default": "直连"
@@ -820,7 +823,7 @@
       "type": "selector",
       "tag": "Microsoft",
       "outbounds": [
-        "主代理v6.26",
+        "主代理v6.27",
         "直连"
       ],
       "default": "直连"
@@ -830,7 +833,7 @@
       "tag": "直连",
       "domain_resolver": {
         "server": "dns-ali",
-        "strategy": "ipv4_only"
+        "strategy": "prefer_ipv4"
       }
     },
     {
@@ -845,7 +848,7 @@
       "type": "selector",
       "tag": "规则集下载",
       "outbounds": [
-        "主代理v6.26",
+        "主代理v6.27",
         "直连",
         "自建"
       ],
@@ -856,10 +859,10 @@
       "tag": "Telegram",
       "outbounds": [
         "直连",
-        "主代理v6.26",
+        "主代理v6.27",
         "自建"
       ],
-      "default": "主代理v6.26"
+      "default": "主代理v6.27"
     }
   ]
 }
