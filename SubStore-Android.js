@@ -251,16 +251,16 @@ for (const proxy of produced) {
         !config.dns?.servers?.some(item => item.tag === 'dns-provider-2')) {
       throw new Error('模板缺少服务商 DNS，请更新对应平台的配置模板')
     }
-    proxy.domain_resolver = { server: 'dns-provider-1', strategy: 'prefer_ipv4', disable_optimistic_cache: true }
+    proxy.domain_resolver = { server: 'dns-provider-1', strategy: 'ipv4_only', disable_optimistic_cache: true }
     providerDomains.add(server.toLowerCase().replace(/\.$/, ''))
   } else if (typeof server === 'string' && server && !isIPv4 && !isIPv6 && !proxy.domain_resolver) {
     // 节点地址过期后同步刷新，避免换址后的首次拨号继续使用旧 IP。
-    proxy.domain_resolver = { server: 'dns-ali', strategy: 'prefer_ipv4', disable_optimistic_cache: true }
+    proxy.domain_resolver = { server: 'dns-ali', strategy: 'ipv4_only', disable_optimistic_cache: true }
   }
-  // IP-01: 用户要求所有订阅域名节点优先 IPv4；尊重显式 DNS server/
+  // IP-01: 用户要求所有订阅域名节点仅使用 IPv4；尊重显式 DNS server/
   // disable_optimistic_cache 字段，仅规范其地址族选择策略。
   if (proxy.domain_resolver && typeof proxy.domain_resolver.strategy === 'string') {
-    proxy.domain_resolver.strategy = 'prefer_ipv4'
+    proxy.domain_resolver.strategy = 'ipv4_only'
   }
   selected.push(proxy)
 }
