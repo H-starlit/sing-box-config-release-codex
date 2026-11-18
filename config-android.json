@@ -62,6 +62,14 @@
     "rule_set": [
       {
         "type": "remote",
+        "tag": "geosite-bilibili",
+        "format": "binary",
+        "initial_path": "规则集/占位符.srs",
+        "url": "https://gitlab.com/H-starlit/file-sync/-/raw/main/singbox/geosite-bilibili.srs",
+        "update_interval": "48h"
+      },
+      {
+        "type": "remote",
         "tag": "geosite-cn-dustin",
         "format": "binary",
         "initial_path": "规则集/占位符.srs",
@@ -180,6 +188,13 @@
         "timeout": "300ms"
       },
       {
+        "rule_set": [
+          "geosite-bilibili"
+        ],
+        "action": "route",
+        "outbound": "哔哩哔哩"
+      },
+      {
         "domain_suffix": [
           ".cn"
         ],
@@ -191,7 +206,7 @@
           "geosite-github"
         ],
         "action": "route",
-        "outbound": "主代理v6.30"
+        "outbound": "主代理v6.31"
       },
       {
         "rule_set": [
@@ -323,7 +338,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.30"
+        "detour": "主代理v6.31"
       },
       {
         "type": "https",
@@ -334,7 +349,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.30"
+        "detour": "主代理v6.31"
       },
       {
         "type": "https",
@@ -345,7 +360,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.30"
+        "detour": "主代理v6.31"
       },
       {
         "type": "https",
@@ -356,7 +371,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.30"
+        "detour": "主代理v6.31"
       },
       {
         "type": "local",
@@ -668,18 +683,19 @@
       "type": "selector",
       "tag": "GLOBAL",
       "outbounds": [
-        "主代理v6.30",
+        "主代理v6.31",
         "漏网之鱼",
         "AI服务",
+        "哔哩哔哩",
         "Telegram",
         "自建",
         "直连"
       ],
-      "default": "主代理v6.30"
+      "default": "主代理v6.31"
     },
     {
       "type": "selector",
-      "tag": "主代理v6.30",
+      "tag": "主代理v6.31",
       "outbounds": [
         "直连",
         "自建"
@@ -688,19 +704,28 @@
     },
     {
       "type": "selector",
+      "tag": "哔哩哔哩",
+      "outbounds": [
+        "直连",
+        "主代理v6.31"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
       "tag": "漏网之鱼",
       "outbounds": [
-        "主代理v6.30",
+        "主代理v6.31",
         "直连"
       ],
-      "default": "主代理v6.30"
+      "default": "主代理v6.31"
     },
     {
       "type": "selector",
       "tag": "AI服务",
       "outbounds": [
         "直连",
-        "主代理v6.30",
+        "主代理v6.31",
         "自建"
       ],
       "default": "自建"
@@ -725,7 +750,7 @@
       "type": "selector",
       "tag": "规则集下载",
       "outbounds": [
-        "主代理v6.30",
+        "主代理v6.31",
         "直连",
         "自建"
       ],
@@ -736,10 +761,10 @@
       "tag": "Telegram",
       "outbounds": [
         "直连",
-        "主代理v6.30",
+        "主代理v6.31",
         "自建"
       ],
-      "default": "主代理v6.30"
+      "default": "主代理v6.31"
     }
   ]
 }
