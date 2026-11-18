@@ -321,7 +321,7 @@ if (versionedPrimary.length !== 1 || versionedPrimary[0].type !== 'selector' ||
     versionedPrimary[0].default !== '直连') {
   throw new Error('模板缺少唯一且默认直连的主代理（兼容旧模板或版本化模板）')
 }
-const countryAwareSelectors = new Set(['GLOBAL', versionedPrimary[0].tag, 'AI服务', '哔哩哔哩', 'Telegram'])
+const countryAwareSelectors = new Set(['GLOBAL', versionedPrimary[0].tag, 'AI服务', 'Telegram'])
 for (const outbound of config.outbounds) {
   if (!countryAwareSelectors.has(outbound.tag)) continue
   outbound.outbounds = [...new Set([...outbound.outbounds, ...countryGroups])]
