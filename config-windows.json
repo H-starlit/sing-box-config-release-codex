@@ -227,7 +227,7 @@
           "mixed-main-proxy-in"
         ],
         "action": "route",
-        "outbound": "主代理v6.32"
+        "outbound": "主代理v6.33"
       },
       {
         "inbound": [
@@ -256,6 +256,17 @@
         ],
         "action": "route",
         "outbound": "直连"
+      },
+      {
+        "domain_suffix": [
+          "asus.com",
+          "asus.com.cn",
+          "asuscloud.com",
+          "asuswebstorage.com",
+          "asuscomm.com"
+        ],
+        "action": "route",
+        "outbound": "华硕"
       },
       {
         "rule_set": [
@@ -300,14 +311,14 @@
           "geosite-google"
         ],
         "action": "route",
-        "outbound": "主代理v6.32"
+        "outbound": "主代理v6.33"
       },
       {
         "rule_set": [
           "geosite-github"
         ],
         "action": "route",
-        "outbound": "主代理v6.32"
+        "outbound": "主代理v6.33"
       },
       {
         "rule_set": [
@@ -436,7 +447,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.32"
+        "detour": "主代理v6.33"
       },
       {
         "type": "https",
@@ -447,7 +458,7 @@
           "enabled": true,
           "server_name": "cloudflare-dns.com"
         },
-        "detour": "主代理v6.32"
+        "detour": "主代理v6.33"
       },
       {
         "type": "https",
@@ -458,7 +469,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.32"
+        "detour": "主代理v6.33"
       },
       {
         "type": "https",
@@ -469,7 +480,7 @@
           "enabled": true,
           "server_name": "dns.google"
         },
-        "detour": "主代理v6.32"
+        "detour": "主代理v6.33"
       },
       {
         "type": "local",
@@ -786,24 +797,34 @@
       "type": "selector",
       "tag": "GLOBAL",
       "outbounds": [
-        "主代理v6.32",
+        "主代理v6.33",
         "漏网之鱼",
         "AI服务",
         "哔哩哔哩",
+        "华硕",
         "Telegram",
         "Steam",
         "游戏下载",
         "自建",
         "直连"
       ],
-      "default": "主代理v6.32"
+      "default": "主代理v6.33"
     },
     {
       "type": "selector",
-      "tag": "主代理v6.32",
+      "tag": "主代理v6.33",
       "outbounds": [
         "直连",
         "自建"
+      ],
+      "default": "直连"
+    },
+    {
+      "type": "selector",
+      "tag": "华硕",
+      "outbounds": [
+        "直连",
+        "主代理v6.33"
       ],
       "default": "直连"
     },
@@ -812,7 +833,7 @@
       "tag": "哔哩哔哩",
       "outbounds": [
         "直连",
-        "主代理v6.32"
+        "主代理v6.33"
       ],
       "default": "直连"
     },
@@ -820,17 +841,17 @@
       "type": "selector",
       "tag": "漏网之鱼",
       "outbounds": [
-        "主代理v6.32",
+        "主代理v6.33",
         "直连"
       ],
-      "default": "主代理v6.32"
+      "default": "主代理v6.33"
     },
     {
       "type": "selector",
       "tag": "AI服务",
       "outbounds": [
         "直连",
-        "主代理v6.32",
+        "主代理v6.33",
         "自建"
       ],
       "default": "自建"
@@ -839,16 +860,16 @@
       "type": "selector",
       "tag": "Steam",
       "outbounds": [
-        "主代理v6.32",
+        "主代理v6.33",
         "直连"
       ],
-      "default": "主代理v6.32"
+      "default": "主代理v6.33"
     },
     {
       "type": "selector",
       "tag": "游戏下载",
       "outbounds": [
-        "主代理v6.32",
+        "主代理v6.33",
         "直连"
       ],
       "default": "直连"
@@ -857,7 +878,7 @@
       "type": "selector",
       "tag": "Microsoft",
       "outbounds": [
-        "主代理v6.32",
+        "主代理v6.33",
         "直连"
       ],
       "default": "直连"
@@ -882,7 +903,7 @@
       "type": "selector",
       "tag": "规则集下载",
       "outbounds": [
-        "主代理v6.32",
+        "主代理v6.33",
         "直连",
         "自建"
       ],
@@ -893,10 +914,10 @@
       "tag": "Telegram",
       "outbounds": [
         "直连",
-        "主代理v6.32",
+        "主代理v6.33",
         "自建"
       ],
-      "default": "主代理v6.32"
+      "default": "主代理v6.33"
     }
   ]
 }
